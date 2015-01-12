@@ -1,4 +1,4 @@
-package org.motechproject.CampaignDemo.controllers;
+package org.motechproject.campaigndemo.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.CampaignDemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.dao.PatientDAO;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
 import org.springframework.web.servlet.ModelAndView;
 

@@ -1,4 +1,4 @@
-package org.motechproject.CampaignDemo.controllers;
+package org.motechproject.campaigndemo.controllers;
 
 import static org.mockito.Mockito.verify;
 
@@ -13,8 +13,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.CampaignDemo.dao.PatientDAO;
-import org.motechproject.CampaignDemo.model.Patient;
+import org.motechproject.campaigndemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.model.Patient;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
 import org.springframework.web.servlet.ModelAndView;
 

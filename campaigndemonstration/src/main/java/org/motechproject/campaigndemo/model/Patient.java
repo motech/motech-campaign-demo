@@ -1,4 +1,4 @@
-package org.motechproject.CampaignDemo.model;
+package org.motechproject.campaigndemo.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.ektorp.support.TypeDiscriminator;
 import org.motechproject.model.MotechBaseDataObject;
@@ -16,7 +16,7 @@ public class Patient extends MotechBaseDataObject {
 	private final String type = "PATIENT";
     
 	@JsonProperty
-	private String externalid;
+	private String externalId;
     @JsonProperty
 	private String phoneNum;
 
@@ -24,12 +24,12 @@ public class Patient extends MotechBaseDataObject {
     	
     }
     
-    public Patient(String externalid) {
-    	this.externalid = externalid;
+    public Patient(String externalId) {
+    	this.externalId = externalId;
     }
     
-	public Patient(String externalid, String phoneNum) {
-		this.externalid = externalid;
+	public Patient(String externalId, String phoneNum) {
+		this.externalId = externalId;
 		this.phoneNum = phoneNum;
 	}
 	
@@ -41,17 +41,17 @@ public class Patient extends MotechBaseDataObject {
 		this.phoneNum = phoneNum;
 	}
 	
-	public String getExternalid() {
-		return externalid;
+	public String getExternalId() {
+		return externalId;
 	}
 	
 	public void setExternalId(String externalId) {
-		this.externalid = externalId;
+		this.externalId = externalId;
 	}
 	
 	public boolean equals(Object o) {
 		Patient patient = (Patient) o;
-		if (patient.getExternalid().equals(externalid)) return true;
+		if (patient.getExternalId().equals(externalId)) return true;
 		return false;
 	}
 }

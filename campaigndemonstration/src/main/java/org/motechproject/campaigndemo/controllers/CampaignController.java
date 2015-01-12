@@ -1,20 +1,19 @@
-package org.motechproject.CampaignDemo.controllers;
+package org.motechproject.campaigndemo.controllers;
 
+import org.motechproject.campaigndemo.dao.PatientDataService;
+import org.motechproject.campaigndemo.model.Patient;
+import org.motechproject.messagecampaign.contract.CampaignRequest;
+import org.motechproject.messagecampaign.service.CampaignEnrollmentsQuery;
+import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.motechproject.CampaignDemo.dao.PatientDAO;
-import org.motechproject.CampaignDemo.model.Patient;
-import org.motechproject.model.Time;
-import org.motechproject.server.messagecampaign.EventKeys;
-import org.motechproject.server.messagecampaign.contract.CampaignRequest;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 /**
  * A Spring controller for starting and stopping campaigns based on an external ID.
  * 
@@ -23,23 +22,23 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  * @author Russell Gillen
  *
  */
-
-public class CampaignController extends MultiActionController {
+@Controller
+public class CampaignController {
 
 	/**
 	 * Defined in campaignDemoResource.xml
 	 */
 	@Autowired
-	private PatientDAO patientDAO; 
+	private PatientDataService patientDataService;
 	
 	/**
 	 * Defined in the motech-messagecampaign module, available from applicationMessageCampaign.xml import
 	 */
 	@Autowired
-	private MessageCampaignService service; 
-	
-	public CampaignController(MessageCampaignService service, PatientDAO patientDAO) {
-		this.patientDAO = patientDAO;
+	private MessageCampaignService service;
+
+	public CampaignController(MessageCampaignService service, PatientDataService patientDataService) {
+		this.patientDataService = patientDataService;
 		this.service = service;
 	}
 	
@@ -51,15 +50,6 @@ public class CampaignController extends MultiActionController {
 
 		String externalId = request.getParameter("externalId");
 		String campaignName = request.getParameter("campaignName");
-		String startoffset = request.getParameter("offset");
-		
-		int offsetValue = 0;
-		
-		try {
-			offsetValue = Integer.parseInt(startoffset);
-		} catch (NumberFormatException e) {
-			offsetValue = 0;
-		}
 
 		/**
 		 * The campaign name in the campaign request references the simple-message-campaign.json
@@ -70,10 +60,9 @@ public class CampaignController extends MultiActionController {
 		CampaignRequest campaignRequest = new CampaignRequest();
 		campaignRequest.setCampaignName(campaignName);
 		campaignRequest.setExternalId(externalId);
-		campaignRequest.setStartOffset(offsetValue); 
-		
+
 		/**
-		 * The startFor method schedules a periodic task that is executed every two minutes
+		 * The enroll method schedules a periodic task that is executed every two minutes
 		 * until the campaign is stopped, as defined in the campaign request above.
 		 * The MessageCampaignService uses the motech-platform-scheduler
 		 * module to schedule this task in Quartz. Each time the job is executed, an event is fired
@@ -82,14 +71,14 @@ public class CampaignController extends MultiActionController {
 		 * module. To take action based on this fired event, an implementer should write a listener for the event 
 		 * (see TestListener for a demonstration of a listener on a fired campaign event).
 		 */
-		service.startFor(campaignRequest);  
+		service.enroll(campaignRequest);
 		
-		List<Patient> patientList = patientDAO.findAllPatients(); 
+		List<Patient> patientList = patientDataService.retrieveAll();
 		
 		Map<String, Object> modelMap = new TreeMap<String, Object>();
 		modelMap.put("patients", patientList); //List of patients is for display purposes only
 		
-		ModelAndView mv = null;
+		ModelAndView mv;
 		
 		if (campaignName.equals("Cron based Message Program")) {
 			mv = new ModelAndView("cronFormPage", modelMap);
@@ -100,33 +89,30 @@ public class CampaignController extends MultiActionController {
 		return mv;
 	}
 	
-	public ModelAndView stop(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView stop(HttpServletRequest request) {
 		
 		String externalId = request.getParameter("externalId");
 		String campaignName = request.getParameter("campaignName");
 
-		CampaignRequest campaignRequest = new CampaignRequest();
-		campaignRequest.setCampaignName(campaignName);
-		campaignRequest.setExternalId(externalId);
-		
-		
-		
+		CampaignEnrollmentsQuery query = new CampaignEnrollmentsQuery()
+				.withCampaignName(campaignName).withExternalId(externalId);
+
 		/**
-		 * See comment for service.startFor(campaignRequest) in above method for a more detailed description.
-		 * When stopping a campaign, an event is not raised, the job is simply remoed from the Quartz scheduler and
+		 * See comment for service.startFor(campaignEnrollmentsQuery) in above method for a more detailed description.
+		 * When stopping a campaign, an event is not raised, the job is simply removed from the Quartz scheduler and
 		 * no more events are raised. 
 		 * stopAll stops ALL messages associated with the specific campaign and specific external id.
 		 * To stop a specific message, instead call service.stopFor(campaignRequest, messageKey) 
 		 * with the provided message key as a parameter
 		 */	
-		service.stopAll(campaignRequest); 
+		service.stopAll(query);
 		
-		List<Patient> patientList = patientDAO.findAllPatients();
+		List<Patient> patientList = patientDataService.retrieveAll();
 		
-		Map<String, Object> modelMap = new TreeMap<String, Object>();
+		Map<String, Object> modelMap = new TreeMap<>();
 		modelMap.put("patients", patientList); //List of patients is for display purposes only
 		
-		ModelAndView mv = null;
+		ModelAndView mv;
 		
 		if (campaignName.equals("Cron based Message Program")) {
 			mv = new ModelAndView("cronFormPage", modelMap);

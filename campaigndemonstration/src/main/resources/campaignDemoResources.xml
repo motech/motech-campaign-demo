@@ -25,17 +25,17 @@
 	</bean>
 
 	<bean id="patientDAO"
-		class="org.motechproject.CampaignDemo.dao.PatientsCouchDBDAOImpl">
+		class="org.motechproject.campaigndemo.dao.PatientsCouchDBDAOImpl">
 		<constructor-arg ref="patientDatabase" />
 	</bean>
 
 	<!-- For bootstrapping content at server startup -->
-	<bean id="contentInitiator" class="org.motechproject.CampaignDemo.dao.ContentInitiator"
+	<bean id="contentInitiator" class="org.motechproject.campaigndemo.dao.ContentInitiator"
 		init-method="bootstrap">
 	</bean>
 
 
-	<bean id="testListener" class="org.motechproject.CampaignDemo.listeners.TestListener" />
+	<bean id="testListener" class="org.motechproject.campaigndemo.listeners.TestListener" />
 	
 	<bean id="smsService" class="org.motechproject.sms.api.service.SmsServiceImpl">
 		<constructor-arg ref="messageSplitter" />

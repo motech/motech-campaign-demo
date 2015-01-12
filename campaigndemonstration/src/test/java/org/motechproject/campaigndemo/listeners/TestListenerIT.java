@@ -1,4 +1,4 @@
-package org.motechproject.CampaignDemo.listeners;
+package org.motechproject.campaigndemo.listeners;
 
 
 
@@ -14,8 +14,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.CampaignDemo.dao.PatientDAO;
-import org.motechproject.CampaignDemo.model.Patient;
+import org.motechproject.campaigndemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.model.Patient;
 import org.motechproject.cmslite.api.model.ContentNotFoundException;
 import org.motechproject.cmslite.api.model.StringContent;
 import org.motechproject.cmslite.api.service.CMSLiteService;

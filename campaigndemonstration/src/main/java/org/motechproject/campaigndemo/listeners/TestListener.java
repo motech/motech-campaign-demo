@@ -1,10 +1,10 @@
-package org.motechproject.CampaignDemo.listeners;
+package org.motechproject.campaigndemo.listeners;
 
 
 import java.util.List;
 
-import org.motechproject.CampaignDemo.dao.PatientDAO;
-import org.motechproject.CampaignDemo.model.Patient;
+import org.motechproject.campaigndemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.model.Patient;
 import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.motechproject.cmslite.api.model.ContentNotFoundException;
 import org.motechproject.cmslite.api.model.StringContent;
@@ -125,7 +125,7 @@ public class TestListener {
 					 */
 					CallRequest request = new CallRequest(phoneNum, 119, content.getValue());
 
-					request.getPayload().put("USER_ID", patientList.get(0).getExternalid()); //put Id in the payload
+					request.getPayload().put("USER_ID", patientList.get(0).getExternalId()); //put Id in the payload
 					request.setOnBusyEvent(new MotechEvent("CALL_BUSY"));
 					request.setOnFailureEvent(new MotechEvent("CALL_FAIL"));
 					request.setOnNoAnswerEvent(new MotechEvent("CALL_NO_ANSWER"));

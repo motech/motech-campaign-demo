@@ -1,4 +1,4 @@
-package org.motechproject.CampaignDemo.dao;
+package org.motechproject.campaigndemo.dao;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.motechproject.CampaignDemo.model.Patient;
+import org.motechproject.campaigndemo.model.Patient;
 
 
 public class PatientsCouchDBDAOImplTest {
@@ -69,7 +69,7 @@ public class PatientsCouchDBDAOImplTest {
     	
         when(patientDAO.findByExternalid("123")).thenReturn(patientList);
         
-        patientDAO.removePatient(patient.getExternalid());
+        patientDAO.removePatient(patient.getExternalId());
 
         verify(couchDbConnector).delete(patientList.get(0));
     }
