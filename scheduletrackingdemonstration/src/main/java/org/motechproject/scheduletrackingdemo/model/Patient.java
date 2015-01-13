@@ -1,15 +1,16 @@
-package org.motechproject.campaigndemo.model;
+package org.motechproject.scheduletrackingdemo.model;
+
 import org.motechproject.mds.annotations.Entity;
 import org.motechproject.mds.annotations.Field;
 
 /**
  * Patients associate an external id with a phone number
- * This is an MDS entity
+ * This is an MDS entity.
  * @author Russell Gillen
  */
 @Entity
 public class Patient {
-
+	
 	@Field
 	private String externalId;
 
@@ -45,10 +46,9 @@ public class Patient {
 	}
 	
 	public boolean equals(Object o) {
-		if (o == this) {
+		if (this == o) {
 			return true;
-		}
-		if (!(o instanceof Patient)) {
+		} else if (!(o instanceof Patient)) {
 			return false;
 		}
 

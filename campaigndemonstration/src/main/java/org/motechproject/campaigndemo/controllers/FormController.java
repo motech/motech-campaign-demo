@@ -1,4 +1,5 @@
 package org.motechproject.campaigndemo.controllers;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class FormController {
 
-	
 	public ModelAndView cronCampaign() {
 		return new ModelAndView("cronFormPage");
 	}

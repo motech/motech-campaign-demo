@@ -1,26 +1,29 @@
 package org.motechproject.campaigndemo.listeners;
 
 
-import java.util.List;
-
-import org.motechproject.campaigndemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.dao.PatientDataService;
 import org.motechproject.campaigndemo.model.Patient;
-import org.motechproject.cmslite.api.service.CMSLiteService;
-import org.motechproject.cmslite.api.model.ContentNotFoundException;
-import org.motechproject.cmslite.api.model.StringContent;
-import org.motechproject.ivr.model.CallInitiationException;
-import org.motechproject.ivr.service.CallRequest;
-import org.motechproject.ivr.service.IVRService;
-import org.motechproject.model.MotechEvent;
-import org.motechproject.server.event.annotations.MotechListener;
-import org.motechproject.server.messagecampaign.EventKeys;
-import org.motechproject.server.messagecampaign.contract.CampaignRequest;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
-import org.motechproject.sms.api.service.SmsService;
-import org.motechproject.sms.http.SmsDeliveryFailureException;
+import org.motechproject.cmslite.model.ContentNotFoundException;
+import org.motechproject.cmslite.model.StringContent;
+import org.motechproject.cmslite.service.CMSLiteService;
+import org.motechproject.event.MotechEvent;
+import org.motechproject.event.listener.annotations.MotechListener;
+import org.motechproject.ivr.service.CallInitiationException;
+import org.motechproject.ivr.service.OutboundCallService;
+import org.motechproject.messagecampaign.EventKeys;
+import org.motechproject.messagecampaign.service.CampaignEnrollmentsQuery;
+import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.motechproject.sms.service.OutgoingSms;
+import org.motechproject.sms.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A listener class used to listen on fired campaign message events.
@@ -36,32 +39,35 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Russell Gillen
  *
  */
+@Component
 public class TestListener {
 
 	private static final String SMS_FORMAT = "SMS";
 	private static final String IVR_FORMAT = "IVR";
+	private static final String VOXEO_CONFIG = "voxeo";
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
-	 * Defined in the motech-cmslite-api module, available from applicationCmsLiteApi.xml import
+	 * Defined in the cms-lite module, available as an OSGi service
 	 */
 	@Autowired
-	private  CMSLiteService cmsliteService;
+	private CMSLiteService cmsliteService;
 
 	/**
 	 * Defined in campaignDemoResource.xml
 	 */
 	@Autowired
-	private PatientDAO patientDAO;
+	private PatientDataService patientDataService;
 
 	/**
-	 * Defined in the voxeo module, available from voxeoResources.xml import
+	 * Defined in the IVR module, available as an OSGi service
 	 */
 	@Autowired
-	private IVRService ivrService;
+	private OutboundCallService outboundCallService;
 
 	/**
-	 * Defined in the motech-messagecampaign module, available from applicationMessageCampaign.xml import
+	 * Defined in the message-campaign module, available as an OSGi service
 	 */
 	@Autowired
 	private MessageCampaignService service;
@@ -69,21 +75,8 @@ public class TestListener {
 	@Autowired
 	private SmsService smsService;
 
-	public TestListener() {
-
-	}
-
-
-	public TestListener(CMSLiteService cmsliteService, PatientDAO patientDAO,
-			IVRService ivrService, MessageCampaignService service) {
-		this.cmsliteService = cmsliteService;
-		this.patientDAO = patientDAO;
-		this.ivrService = ivrService;
-		this.service = service;
-	}
-
 	/**
-	 * Methods are registered as listeners on specific motech events. All motech events
+	 * Methods are registered as listeners on specific MOTECH events. All MOTECH events
 	 * have an associated subject, which is found in an appropriate EventKeys class.
 	 * When an event with that particular subject is relayed, this method will be invoked.
 	 * The payload parameters, in this case, campaign name, message key and external id, must be known
@@ -92,7 +85,7 @@ public class TestListener {
 	 * @param event The Motech event relayed by the EventRelay
 	 * @throws ContentNotFoundException 
 	 */
-	@MotechListener(subjects={EventKeys.MESSAGE_CAMPAIGN_FIRED_EVENT_SUBJECT})
+	@MotechListener(subjects={EventKeys.SEND_MESSAGE})
 	public void execute(MotechEvent event) throws ContentNotFoundException {
 
 		String campaignName = (String) event.getParameters().get(EventKeys.CAMPAIGN_NAME_KEY);
@@ -102,55 +95,47 @@ public class TestListener {
 		String language = languages.get(0);
 		List<String> formats = ((List<String>) event.getParameters().get(EventKeys.MESSAGE_FORMATS));
 
-		List<Patient> patientList = patientDAO.findByExternalid(externalId);
+		Patient patient = patientDataService.findByExternalId(externalId);
 
-		if (patientList.size() == 0) { //In the event no patient was found, the campaign is unscheduled
-			CampaignRequest toRemove = new CampaignRequest();
-			toRemove.setCampaignName(campaignName);
-			toRemove.setExternalId(externalId);
+		if (patient == null) { //In the event no patient was found, the campaign is unscheduled
+			CampaignEnrollmentsQuery toRemove = new CampaignEnrollmentsQuery()
+				.withCampaignName(campaignName)
+				.withExternalId(externalId);
 
 			service.stopAll(toRemove); //See CampaignController for documentation on MessageCampaignService calls
-			//To stop a specific message: service.stopFor(toRemove, messageKey);
-			return;
 		} else {
 
-			String phoneNum = patientList.get(0).getPhoneNum();
+			String phoneNum = patient.getPhoneNum();
 
 			if (formats.contains(IVR_FORMAT)) { //place IVR call
-				if (cmsliteService.isStringContentAvailable(language, messageKey, IVR_FORMAT)) {
-					StringContent content = cmsliteService.getStringContent(language, messageKey, IVR_FORMAT);
-					/**
-					 * Call requests are used to place IVR calls. They contain a phone number, 
-					 * timeout duration, and vxml URL for content.
-					 */
-					CallRequest request = new CallRequest(phoneNum, 119, content.getValue());
+				/**
+				 * Call requests are used to place IVR calls. They contain a phone number,
+				 * timeout duration, and vxml URL for content.
+				 */
+				Map<String, String> request = new HashMap<>();
 
-					request.getPayload().put("USER_ID", patientList.get(0).getExternalId()); //put Id in the payload
-					request.setOnBusyEvent(new MotechEvent("CALL_BUSY"));
-					request.setOnFailureEvent(new MotechEvent("CALL_FAIL"));
-					request.setOnNoAnswerEvent(new MotechEvent("CALL_NO_ANSWER"));
-					request.setOnSuccessEvent(new MotechEvent("CALL_SUCCESS"));
-					
-					/**
-					 * The Voxeo module sends a request to the Voxeo website, at which point
-					 * control is passed to the ccxml file. The ccxml file will play
-					 * the vxmlUrl defined in the CallRequest. The vxmlUrl contains the content
-					 * of the voice message. The Voxeo website informs
-					 * the motech voxeo module of transition state changes in the phone call.
-					 */
-					try {
-						ivrService.initiateCall(request);
-					} catch (CallInitiationException e) {
-						log.error("Unable to place the call. ", e);
-					}
-				} else { //no content, don't place IVR call
-					log.error("No content available");
+				request.put("USER_ID", patient.getExternalId()); //put Id in the payload
+
+				/**
+				 * The Voxeo module sends a request to the Voxeo website, at which point
+				 * control is passed to the ccxml file. The ccxml file will play
+				 * the vxmlUrl defined in the CallRequest. The vxmlUrl contains the content
+				 * of the voice message. The Voxeo website informs
+				 * the motech voxeo module of transition state changes in the phone call.
+				 */
+				try {
+					outboundCallService.initiateCall(VOXEO_CONFIG, request);
+				} catch (CallInitiationException e) {
+					log.error("Unable to place the call", e);
 				}
 			}
 			if (formats.contains(SMS_FORMAT)) { //send SMS message
-				if (cmsliteService.isStringContentAvailable(language, messageKey, SMS_FORMAT)) {
-					StringContent content = cmsliteService.getStringContent(language, messageKey, SMS_FORMAT);
-					smsService.sendSMS(phoneNum, content.getValue());
+				if (cmsliteService.isStringContentAvailable(language, messageKey)) {
+					StringContent content = cmsliteService.getStringContent(language, messageKey);
+
+					OutgoingSms sms = new OutgoingSms(Arrays.asList(phoneNum), content.getValue());
+
+					smsService.send(sms);
 
 				} else { //no content, don't send SMS
 					log.error("No content available");

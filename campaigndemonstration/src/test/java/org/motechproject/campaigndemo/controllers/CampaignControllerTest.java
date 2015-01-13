@@ -1,23 +1,23 @@
 package org.motechproject.campaigndemo.controllers;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.campaigndemo.dao.PatientDAO;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.campaigndemo.dao.PatientDataService;
+import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RunWith(MockitoJUnitRunner.class)
-public class CampaignControllerTest
-{
-    private CampaignController campaignController;
+public class CampaignControllerTest {
+    @InjectMocks
+    private CampaignController campaignController = new CampaignController();
 
     @Mock
     private HttpServletRequest request;
@@ -29,13 +29,8 @@ public class CampaignControllerTest
     private MessageCampaignService service;
     
     @Mock
-    private PatientDAO patientDAO;
+    private PatientDataService patientDataService;
 
-    @Before
-    public void initMocks() {
-    	campaignController = new CampaignController(service, patientDAO);
-     }
-    
     @Test
     public void testStartCampaign () {
 
@@ -60,7 +55,7 @@ public class CampaignControllerTest
     	Mockito.when(request.getParameter("externalId")).thenReturn(requestId);
     	Mockito.when(request.getParameter("campaignName")).thenReturn(campaignName);
     	
-    	ModelAndView modelAndView = campaignController.stop(request, response);
+    	ModelAndView modelAndView = campaignController.stop(request);
     	
     	Assert.assertEquals("formPage", modelAndView.getViewName());
     }

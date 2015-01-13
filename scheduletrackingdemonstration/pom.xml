@@ -2,121 +2,66 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>motech</artifactId>
+		<artifactId>motech-campaigns-demo</artifactId>
 		<groupId>org.motechproject</groupId>
-		<version>0.8-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>org.motechproject</groupId>
+
 	<artifactId>scheduletrackingdemonstration</artifactId>
-	<version>0.8-SNAPSHOT</version>
-	<name>scheduletrackingdemonstration</name>
-	<packaging>jar</packaging>
-	<description>Campaign Demo</description>
-
-	<url>http://maven.apache.org</url>
-
-	<properties>
-		<springVersion>3.0.5.RELEASE</springVersion>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<version>1.0-SNAPSHOT</version>
+	<name>Schedule-Tracking Demonstration</name>
+	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-outbox-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-			<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-scheduletracking-api</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.motechproject</groupId>
+			<artifactId>schedule-tracking</artifactId>
+			<version>${motech.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-cmslite-api</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.motechproject</groupId>
+			<artifactId>cms-lite</artifactId>
+			<version>${motech.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-mobileforms-api</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.motechproject</groupId>
+			<artifactId>ivr</artifactId>
+			<version>${motech.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-message-campaign</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.motechproject</groupId>
+			<artifactId>sms</artifactId>
+			<version>${motech.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-platform-ivr</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-ivr-voxeo</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-				<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-mrs-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-				<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-openmrs-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-sms-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>motech-sms-http</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${springVersion}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${springVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
+			<groupId>org.motechproject</groupId>
+			<artifactId>openmrs-19</artifactId>
+			<version>${motech.version}</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.4</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Context-Path>campaign-demonstration</Context-Path>
+						<Resource-Path>campaign-demonstration/resource</Resource-Path>
+						<Blueprint-Enabled>true</Blueprint-Enabled>
+						<Export-Package>
+							org.motechproject.scheduletrackingdemo.model;version=${project.version},
+							org.motechproject.scheduletrackingdemo.dao;version=${project.version}
+						</Export-Package>
+						<Import-Package>
+							*
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -37,15 +37,6 @@ public class CampaignController {
 	@Autowired
 	private MessageCampaignService service;
 
-	public CampaignController(MessageCampaignService service, PatientDataService patientDataService) {
-		this.patientDataService = patientDataService;
-		this.service = service;
-	}
-	
-	public CampaignController() {
-		
-	}
-
 	public ModelAndView start(HttpServletRequest request, HttpServletResponse response) {
 
 		String externalId = request.getParameter("externalId");

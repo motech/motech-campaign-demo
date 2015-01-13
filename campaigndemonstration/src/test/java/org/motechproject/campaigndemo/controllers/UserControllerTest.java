@@ -1,27 +1,28 @@
 package org.motechproject.campaigndemo.controllers;
 
-import static org.mockito.Mockito.verify;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.motechproject.campaigndemo.dao.PatientDAO;
+import org.motechproject.campaigndemo.dao.PatientDataService;
 import org.motechproject.campaigndemo.model.Patient;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+
 @RunWith(MockitoJUnitRunner.class)
-public class UserControllerTest
-{
-    private UserController userController;
+public class UserControllerTest {
+
+	@InjectMocks
+	private UserController userController = new UserController();
 
     @Mock
     private HttpServletRequest request;
@@ -30,13 +31,8 @@ public class UserControllerTest
     private HttpServletResponse response;
     
     @Mock
-    private PatientDAO patientDAO;
+    private PatientDataService patientDataService;
 
-    @Before
-    public void initMocks() {
-    	userController = new UserController(patientDAO);
-     }
-    
     @Test
     public void testAddUser () {
 
@@ -46,12 +42,12 @@ public class UserControllerTest
     	Mockito.when(request.getParameter("externalId")).thenReturn(requestId);
     	Mockito.when(request.getParameter("phoneNum")).thenReturn(phoneNum);
     	
-    	ModelAndView modelAndView = userController.addCronUser(request, response);
+    	ModelAndView modelAndView = userController.addCronUser(request);
     	
     	Assert.assertEquals("cronFormPage", modelAndView.getViewName());
-    	verify(patientDAO).findByExternalid(Matchers.anyString());
-    	verify(patientDAO, Mockito.atMost(1)).add(Matchers.any(Patient.class));
-    	verify(patientDAO, Mockito.atMost(1)).update(Matchers.any(Patient.class));
+    	verify(patientDataService).findByExternalId(Matchers.anyString());
+    	verify(patientDataService, Mockito.atMost(1)).create(Matchers.any(Patient.class));
+    	verify(patientDataService, Mockito.atMost(1)).update(Matchers.any(Patient.class));
 
     }
     
@@ -62,13 +58,10 @@ public class UserControllerTest
     	
     	Mockito.when(request.getParameter("externalId")).thenReturn(requestId);
 
-    	
-    	ModelAndView modelAndView = userController.removeCronUser(request, response);
+    	ModelAndView modelAndView = userController.removeCronUser(request);
     	
     	Assert.assertEquals("cronFormPage", modelAndView.getViewName());
-    	verify(patientDAO).removePatient(Matchers.anyString());
-    	verify(patientDAO, Mockito.atLeast(1)).removePatient(Matchers.any(String.class));
-    	verify(patientDAO, Mockito.atMost(1)).removePatient(Matchers.any(String.class));
+    	verify(patientDataService).delete(any(Patient.class));
 
     }
     

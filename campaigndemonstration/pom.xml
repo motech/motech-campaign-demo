@@ -24,6 +24,16 @@
 			<artifactId>cms-lite</artifactId>
 			<version>${motech.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.motechproject</groupId>
+			<artifactId>ivr</artifactId>
+			<version>${motech.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.motechproject</groupId>
+			<artifactId>sms</artifactId>
+			<version>${motech.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -39,7 +49,8 @@
 						<Resource-Path>campaign-demonstration/resource</Resource-Path>
 						<Blueprint-Enabled>true</Blueprint-Enabled>
 						<Export-Package>
-							org.motechproject.campaigndedemo;version=${project.version},
+							org.motechproject.campaigndedemo.dao;version=${project.version},
+							org.motechproject.campaigndedemo.model;version=${project.version}
 						</Export-Package>
 						<Import-Package>
 							*
