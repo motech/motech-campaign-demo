@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -66,7 +67,7 @@ public class TestListenerTest {
 		Mockito.when(cmsliteService.isStringContentAvailable("en", "TestCampaignKey")).thenReturn(true);
 		listener.execute(event);
 		
-		verify(outboundCallService).initiateCall("voxeo", anyMap());
+		verify(outboundCallService).initiateCall(eq("voxeo"), anyMap());
 
 	}
 	
