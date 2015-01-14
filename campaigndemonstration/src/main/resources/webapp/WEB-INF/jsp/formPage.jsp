@@ -18,27 +18,26 @@
 	number. The offset duration determines the entry point into the campaign. In this demo, there is a message offset by 2 minutes, corresponding to a week 5 pregnancy message, and messages at 2 minute intervals thereafter, until 72 minutes, which is the final week 40 message. Entering 71 or 72 for an offset will queue you for only the final message. Entering a negative number will offset you further back. No offset or an invalid offset will start you at the default (0). Larger numbers will offset you out of the campaign and you will receive no messages.
 	<br><br>
 	Register a user into the system
-	<form method="post" action="/motech-platform-server/user/addOffsetUser">
+	<form method="post" action="../user/addOffsetUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" />
 		Phone Number (with no special characters, like in 2071234567):<input type="text" name="phoneNum" size="24"
 			maxlength="24" /> <input type="submit" value="Register User" />
 	</form>
 	Unregister a user from the system
-	<form method="post" action="/motech-platform-server/user/removeOffsetUser">
+	<form method="post" action="../user/removeOffsetUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> <input
 			type="submit" value="Unregister User" />
 	</form>
 
 	Register a user in an offset campaign 
-	<form method="post" action="/motech-platform-server/campaign/start">
+	<form method="post" action="../campaign/start">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> 
-		Offset time:<input type="text" name="offset" size="12" maxlength="12" />
 		<input type="hidden" name="campaignName" value="Ghana Pregnancy Message Program" />
 		<input type="submit" value="Register in campaign" />
 	</form>
 
 	Unregister a user from the campaign
-	<form method="post" action="/motech-platform-server/campaign/stop">
+	<form method="post" action="../campaign/stop">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> 
 		<input type="hidden" name="campaignName" value="Ghana Pregnancy Message Program" />
 		<input type="submit" value="Unregister" />
@@ -52,7 +51,7 @@
 	<table>
 		<c:forEach var="patients" items="${patients}">
 			<tr>
-				<td>${patients.externalid}</td>
+				<td>${patients.externalId}</td>
 			</tr>
 		</c:forEach>
 	</table>

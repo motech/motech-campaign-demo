@@ -11,7 +11,7 @@
 </head>
 <body>
 
-	<form method="post" action="/motech-platform-server/openMRS/test">
+	<form method="post" action="../openMRS/test">
 		ID:<input type="text" name="userName" size="12" maxlength="12" />
 		Password:<input type="text" name="password" size="24"
 			maxlength="24" /> <input type="submit" value="Register User" />

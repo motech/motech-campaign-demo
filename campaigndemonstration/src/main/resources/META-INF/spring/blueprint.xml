@@ -17,6 +17,12 @@
 
     <util:properties id="pregnancyMessages" location="classpath:pregnancymessages.properties"/>
 
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/webapp/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="viewClass" value="org.motechproject.osgi.web.BundledJspView"/>
+    </bean>
+
     <!-- The data service for our entity -->
     <osgi:reference id="patientDataServiceOSGi" interface="org.motechproject.campaigndemo.dao.PatientDataService"/>
 
@@ -25,5 +31,6 @@
     <osgi:reference id="smsServiceOSGi" interface="org.motechproject.sms.service.SmsService"/>
     <osgi:reference id="ivrServiceOSGi" interface="org.motechproject.ivr.service.OutboundCallService"/>
     <osgi:reference id="cmsLiteServiceOSGi" interface="org.motechproject.cmslite.service.CMSLiteService"/>
+    <osgi:reference id="messageCampaignServiceOSGi" interface="org.motechproject.messagecampaign.service.MessageCampaignService"/>
 
 </beans>

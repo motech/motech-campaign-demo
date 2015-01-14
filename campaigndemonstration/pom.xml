@@ -45,14 +45,15 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Context-Path>campaign-demonstration</Context-Path>
-						<Resource-Path>campaign-demonstration/resource</Resource-Path>
+						<Context-Path>campaign-demo</Context-Path>
+						<Resource-Path>campaign-demo/resource</Resource-Path>
 						<Blueprint-Enabled>true</Blueprint-Enabled>
 						<Export-Package>
-							org.motechproject.campaigndedemo.dao;version=${project.version},
-							org.motechproject.campaigndedemo.model;version=${project.version}
+							org.motechproject.campaigndemo.dao;version=${project.version},
+							org.motechproject.campaigndemo.model;version=${project.version}
 						</Export-Package>
 						<Import-Package>
+							org.motechproject.osgi.web,
 							*
 						</Import-Package>
 					</instructions>

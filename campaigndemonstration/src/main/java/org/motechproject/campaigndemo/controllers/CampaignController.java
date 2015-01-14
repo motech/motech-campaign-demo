@@ -7,10 +7,11 @@ import org.motechproject.messagecampaign.service.CampaignEnrollmentsQuery;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,6 +24,7 @@ import java.util.TreeMap;
  *
  */
 @Controller
+@RequestMapping("/campaign")
 public class CampaignController {
 
 	/**
@@ -37,10 +39,9 @@ public class CampaignController {
 	@Autowired
 	private MessageCampaignService service;
 
-	public ModelAndView start(HttpServletRequest request, HttpServletResponse response) {
-
-		String externalId = request.getParameter("externalId");
-		String campaignName = request.getParameter("campaignName");
+	@RequestMapping(value = "/start", method = RequestMethod.GET)
+	public ModelAndView start(@RequestParam("externalId") String externalId,
+							  @RequestParam("campaignName") String campaignName) {
 
 		/**
 		 * The campaign name in the campaign request references the simple-message-campaign.json
@@ -66,7 +67,7 @@ public class CampaignController {
 		
 		List<Patient> patientList = patientDataService.retrieveAll();
 		
-		Map<String, Object> modelMap = new TreeMap<String, Object>();
+		Map<String, Object> modelMap = new TreeMap<>();
 		modelMap.put("patients", patientList); //List of patients is for display purposes only
 		
 		ModelAndView mv;
@@ -79,12 +80,9 @@ public class CampaignController {
 		
 		return mv;
 	}
-	
-	public ModelAndView stop(HttpServletRequest request) {
-		
-		String externalId = request.getParameter("externalId");
-		String campaignName = request.getParameter("campaignName");
 
+	@RequestMapping(value = "/stop", method = RequestMethod.GET)
+	public ModelAndView stop(@RequestParam String externalId, @RequestParam String campaignName) {
 		CampaignEnrollmentsQuery query = new CampaignEnrollmentsQuery()
 				.withCampaignName(campaignName).withExternalId(externalId);
 

@@ -19,26 +19,26 @@
 	number. The cron campaign will send a message every two minutes until the user is unregistered in the campaign or the user is removed from the system.
 	<br><br>
 	Register a user into the system
-	<form method="post" action="/motech-platform-server/user/addCronUser">
+	<form method="post" action="../user/addCronUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" />
 		Phone Number (with no special characters, like in 2071234567):<input type="text" name="phoneNum" size="24"
 			maxlength="24" /> <input type="submit" value="Register User" />
 	</form>
 	Unregister a user from the system
-	<form method="post" action="/motech-platform-server/user/removeCronUser">
+	<form method="post" action="../user/removeCronUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> <input
 			type="submit" value="Unregister User" />
 	</form>
 
 	Register a user in a cron (periodic) campaign (Call every 2 minutes)
-	<form method="post" action="/motech-platform-server/campaign/start">
+	<form method="post" action="../campaign/start">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> 
 		<input type="hidden" name="campaignName" value="Cron based Message Program" />
 		<input type="submit" value="Register in campaign" />
 	</form>
 
 	Unregister a user from the campaign
-	<form method="post" action="/motech-platform-server/campaign/stop">
+	<form method="post" action="../campaign/stop">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> 
 		<input type="hidden" name="campaignName" value="Cron based Message Program" />
 		<input type="submit" value="Unregister" />
@@ -48,7 +48,7 @@
 	<table>
 		<c:forEach var="patients" items="${patients}">
 			<tr>
-				<td>${patients.externalid}</td>
+				<td>${patients.externalId}</td>
 			</tr>
 		</c:forEach>
 	</table>

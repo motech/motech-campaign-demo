@@ -5,6 +5,7 @@ import org.motechproject.campaigndemo.dao.PatientDataService;
 import org.motechproject.campaigndemo.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,23 +20,28 @@ import java.util.TreeMap;
  *
  */
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
 	@Autowired
 	private PatientDataService patientDataService;
-	
+
+	@RequestMapping(value = "/addCronUser")
 	public ModelAndView addCronUser(HttpServletRequest request) {
 		return add("cronFormPage", request);
 	}
 
+	@RequestMapping(value = "/removeCronUser")
 	public ModelAndView removeCronUser(HttpServletRequest request) {
 		return remove("cronFormPage", request);
 	}
 
+	@RequestMapping(value = "/addOffsetUser")
 	public ModelAndView addOffsetUser(HttpServletRequest request) {
 		return add("formPage", request);
 	}
 
+	@RequestMapping(value = "/removeOffsetUser")
 	public ModelAndView removeOffsetUser(HttpServletRequest request) {
 		return remove("formPage", request);
 	}
