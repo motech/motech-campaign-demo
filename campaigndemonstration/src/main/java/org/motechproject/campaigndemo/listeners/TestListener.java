@@ -108,25 +108,35 @@ public class TestListener {
 			String phoneNum = patient.getPhoneNum();
 
 			if (formats.contains(IVR_FORMAT)) { //place IVR call
-				/**
-				 * Call requests are used to place IVR calls. They contain a phone number,
-				 * timeout duration, and vxml URL for content.
-				 */
-				Map<String, String> request = new HashMap<>();
+				if (cmsliteService.isStringContentAvailable(language, messageKey)) {
+					StringContent content = cmsliteService.getStringContent(language, messageKey);
 
-				request.put("USER_ID", patient.getExternalId()); //put Id in the payload
+					/**
+					 * Call requests are used to place IVR calls. They contain a phone number,
+					 * timeout duration, and vxml URL for content.
+					 */
+					Map<String, String> request = new HashMap<>();
 
-				/**
-				 * The Voxeo module sends a request to the Voxeo website, at which point
-				 * control is passed to the ccxml file. The ccxml file will play
-				 * the vxmlUrl defined in the CallRequest. The vxmlUrl contains the content
-				 * of the voice message. The Voxeo website informs
-				 * the motech voxeo module of transition state changes in the phone call.
-				 */
-				try {
-					outboundCallService.initiateCall(VOXEO_CONFIG, request);
-				} catch (CallInitiationException e) {
-					log.error("Unable to place the call", e);
+					request.put("call_timeout", "119");
+					request.put("vxml", content.getValue());
+					request.put("phonenum", phoneNum);
+
+					request.put("USER_ID", patient.getExternalId()); //put Id in the payload
+
+					/**
+					 * The Voxeo module sends a request to the Voxeo website, at which point
+					 * control is passed to the ccxml file. The ccxml file will play
+					 * the vxmlUrl defined in the CallRequest. The vxmlUrl contains the content
+					 * of the voice message. The Voxeo website informs
+					 * the motech voxeo module of transition state changes in the phone call.
+					 */
+					try {
+						outboundCallService.initiateCall(VOXEO_CONFIG, request);
+					} catch (CallInitiationException e) {
+						log.error("Unable to place the call", e);
+					}
+				} else {
+					log.error("No content available");
 				}
 			}
 			if (formats.contains(SMS_FORMAT)) { //send SMS message
