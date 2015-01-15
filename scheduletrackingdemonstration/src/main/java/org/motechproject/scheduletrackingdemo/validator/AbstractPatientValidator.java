@@ -1,3 +1,4 @@
+/*
 package org.motechproject.scheduletrackingdemo.validator;
 
 import java.util.List;
@@ -22,4 +23,4 @@ public abstract class AbstractPatientValidator<V extends FormBean> extends Abstr
 		}		
 	}
 
-}
+}*/

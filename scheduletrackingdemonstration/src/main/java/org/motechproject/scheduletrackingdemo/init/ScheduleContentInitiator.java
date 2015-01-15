@@ -3,6 +3,7 @@ package org.motechproject.scheduletrackingdemo.init;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.motechproject.cmslite.model.CMSLiteException;
+import org.motechproject.cmslite.model.Content;
 import org.motechproject.cmslite.model.StreamContent;
 import org.motechproject.cmslite.model.StringContent;
 import org.motechproject.cmslite.service.CMSLiteService;
@@ -40,33 +41,42 @@ public class ScheduleContentInitiator {
             try (InputStream demoMessageStream = this.getClass().getResourceAsStream("/duedemoconcept" + i + ".wav")) {
                 StreamContent demoFile = new StreamContent("en", "DemoConceptQuestion" + i + "Due",
                         toByteArray(demoMessageStream), "checksum" + i, "audio/wav");
-                cmsliteService.addContent(demoFile);
+                addToCmsLite(demoFile);
             }
             try (InputStream demoMessageStream2 = this.getClass().getResourceAsStream("/latedemoconcept" + i + ".wav")) {
                 StreamContent demoFile2 = new StreamContent("en", "DemoConceptQuestion" + i + "Late",
                         toByteArray(demoMessageStream2), "checksum" + i, "audio/wav");
-                cmsliteService.addContent(demoFile2);
+                addToCmsLite(demoFile2);
             }
-            cmsliteService.addContent(new StringContent("en", "DemoConceptQuestion" + i + "due", "english/due" + i + ".xml"));
-            cmsliteService.addContent(new StringContent("en", "DemoConceptQuestion" + i + "due", getDemoDueMessage(i)));
-            cmsliteService.addContent(new StringContent("en", "DemoConceptQuestion" + i + "late", "english/late" + i + ".xml"));
-            cmsliteService.addContent(new StringContent("en", "DemoConceptQuestion" + i + "late", getDemoLateMessage(i)));
-        
+
+            addToCmsLite(new StringContent("en", "DemoConceptQuestion" + i + "due", getDemoDueMessage(i)));
+            addToCmsLite(new StringContent("en", "DemoConceptQuestion" + i + "late", getDemoLateMessage(i)));
         }
 		
         try (InputStream cronResourceStream = this.getClass().getResourceAsStream("/defaulteddemoschedule.wav")) {
             StreamContent cron = new StreamContent("en", "defaultedDemoSchedule",
                     toByteArray(cronResourceStream), "checksum1", "audio/wav");
-            cmsliteService.addContent(cron);
+            addToCmsLite(cron);
         }
 
-        cmsliteService.addContent(new StringContent("en", "defaulted-demo-message", "english/defaulted.xml"));
-        cmsliteService.addContent(new StringContent("en", "defaulted-demo-message", "You have defaulted on your Demo Concept Schedule. Please visit your doctor for more information."));
+        addToCmsLite(new StringContent("en", "defaulted-demo-message", "You have defaulted on your Demo Concept Schedule. Please visit your doctor for more information."));
         
 	}
 
+    private void addToCmsLite(Content content) throws CMSLiteException {
+        if (content instanceof StringContent) {
+            if (!cmsliteService.isStringContentAvailable(content.getLanguage(), content.getName())) {
+                cmsliteService.addContent(content);
+            }
+        } else {
+            if (!cmsliteService.isStreamContentAvailable(content.getLanguage(), content.getName())) {
+                cmsliteService.addContent(content);
+            }
+        }
+    }
+
 	private String getDemoDueMessage(int messageNumber) {
-	        return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Due");
+	    return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Due");
 	}
 	
 	private String getDemoLateMessage(int messageNumber) {

@@ -1,12 +1,9 @@
-package org.motechproject.scheduletrackingdemo.beans;
+package org.motechproject.scheduletrackingdemo.domain;
 
 import java.util.Date;
 
-import org.motechproject.mobileforms.api.domain.FormBean;
+public class PatientEncounterBean {
 
-public class PatientEncounterBean extends FormBean {
-
-	private static final long serialVersionUID = 1L;
 	private String motechId;
 	private Date observedDate;
 	private int observedConcept;

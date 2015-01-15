@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:orx="http://openrosa.org/jr/xforms" xmlns="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:vellum="http://commcarehq.org/xforms/vellum">
+	<h:head>
+		<h:title>Registration</h:title>
+		<model>
+			<instance>
+				<data xmlns:jrm="http://dev.commcarehq.org/jr/xforms" xmlns="http://openrosa.org/formdesigner/96FE984F-BD4F-43F0-8467-B7D4D3D16E98" uiVersion="1" version="1" name="Registration">
+					<motechID />
+					<firstName />
+					<lastName />
+					<dob />
+					<isDobEstimated />
+					<gender />
+					<phoneNumber />
+					<enrollPatient />
+				</data>
+			</instance>
+			<bind nodeset="/data/motechID" type="xsd:int" />
+			<bind nodeset="/data/firstName" type="xsd:string" />
+			<bind nodeset="/data/lastName" type="xsd:string" />
+			<bind nodeset="/data/dob" type="xsd:date" />
+			<bind nodeset="/data/isDobEstimated" required="false()" />
+			<bind nodeset="/data/gender" type="xsd:string" />
+			<bind nodeset="/data/phoneNumber" type="xsd:string" />
+			<bind nodeset="/data/enrollPatient" />
+			<itext>
+				<translation lang="en" default="">
+					<text id="motechID-label">
+						<value>MOTECH ID</value>
+					</text>
+					<text id="firstName-label">
+						<value>First name</value>
+					</text>
+					<text id="lastName-label">
+						<value>Last name</value>
+					</text>
+					<text id="dob-label">
+						<value>Date of birth</value>
+					</text>
+					<text id="isDobEstimated-label">
+						<value>Is date of birth estimated?</value>
+					</text>
+					<text id="isDobEstimated-true-label">
+						<value>true</value>
+					</text>
+					<text id="isDobEstimated-false-label">
+						<value>false</value>
+					</text>
+					<text id="gender-label">
+						<value>Gender</value>
+					</text>
+					<text id="phoneNumber-label">
+						<value>Phone number</value>
+					</text>
+					<text id="enrollPatient-label">
+						<value>Should enroll patient?</value>
+					</text>
+					<text id="enrollPatient-true-label">
+						<value>true</value>
+					</text>
+					<text id="enrollPatient-false-label">
+						<value>false</value>
+					</text>
+				</translation>
+			</itext>
+		</model>
+	</h:head>
+	<h:body>
+		<input ref="/data/motechID">
+			<label ref="jr:itext('motechID-label')" />
+		</input>
+		<input ref="/data/firstName">
+			<label ref="jr:itext('firstName-label')" />
+		</input>
+		<input ref="/data/lastName">
+			<label ref="jr:itext('lastName-label')" />
+		</input>
+		<input ref="/data/dob">
+			<label ref="jr:itext('dob-label')" />
+		</input>
+		<select1 ref="/data/isDobEstimated">
+			<label ref="jr:itext('isDobEstimated-label')" />
+			<item>
+				<label ref="jr:itext('isDobEstimated-true-label')" />
+				<value>true</value>
+			</item>
+			<item>
+				<label ref="jr:itext('isDobEstimated-false-label')" />
+				<value>false</value>
+			</item>
+		</select1>
+		<input ref="/data/gender">
+			<label ref="jr:itext('gender-label')" />
+		</input>
+		<input ref="/data/phoneNumber">
+			<label ref="jr:itext('phoneNumber-label')" />
+		</input>
+		<select1 ref="/data/enrollPatient">
+			<label ref="jr:itext('enrollPatient-label')" />
+			<item>
+				<label ref="jr:itext('enrollPatient-true-label')" />
+				<value>true</value>
+			</item>
+			<item>
+				<label ref="jr:itext('enrollPatient-false-label')" />
+				<value>false</value>
+			</item>
+		</select1>
+	</h:body>
+</h:html>

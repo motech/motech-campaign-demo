@@ -1,15 +1,9 @@
-package org.motechproject.scheduletrackingdemo.beans;
+package org.motechproject.scheduletrackingdemo.domain;
 
 import java.util.Date;
 
-import org.motechproject.mobileforms.api.domain.FormBean;
-import org.motechproject.mobileforms.api.validator.annotations.RegEx;
-import org.motechproject.mobileforms.api.validator.annotations.Required;
+public class PatientRegistration {
 
-public class PatientRegistrationBean extends FormBean {
-
-	private static final long serialVersionUID = 1L;
-	
 	private String motechId;
 	private String firstName;
 	private String lastName;

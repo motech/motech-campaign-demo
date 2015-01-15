@@ -57,6 +57,7 @@
 							org.motechproject.scheduletrackingdemo.dao;version=${project.version}
 						</Export-Package>
 						<Import-Package>
+                            org.motechproject.osgi.web,
 							*
 						</Import-Package>
 					</instructions>

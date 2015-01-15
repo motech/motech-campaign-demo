@@ -1,13 +1,11 @@
 package org.motechproject.scheduletrackingdemo.controllers;
 
 import org.motechproject.commons.date.util.DateUtil;
-import org.motechproject.scheduletracking.domain.exception.InvalidEnrollmentException;
-import org.motechproject.scheduletracking.service.EnrollmentService;
 import org.motechproject.scheduletracking.service.ScheduleTrackingService;
-import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
 import org.motechproject.scheduletrackingdemo.PatientScheduler;
 import org.motechproject.scheduletrackingdemo.dao.PatientDataService;
 import org.motechproject.scheduletrackingdemo.model.Patient;
+import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +28,6 @@ public class EnrollController {
 
 	@Autowired
 	private ScheduleTrackingService scheduleTrackingService;
-
-	@Autowired
-	private EnrollmentService enrollmentService;
 
 	@Autowired
 	private OpenMrsClient openMrsClient;
@@ -60,11 +55,7 @@ public class EnrollController {
 		String externalID = request.getParameter("externalID");
 		String scheduleName = request.getParameter("scheduleName");
 
-		try {
-			scheduleTrackingService.unenroll(externalID, Arrays.asList(scheduleName));
-		} catch (InvalidEnrollmentException e) {
-			LOG.warn("Could not unenroll externalId=" + externalID + ", scheduleName=" + scheduleName);
-		}
+		scheduleTrackingService.unenroll(externalID, Arrays.asList(scheduleName));
 
 		List<Patient> patientList = patientDataService.retrieveAll();
 		

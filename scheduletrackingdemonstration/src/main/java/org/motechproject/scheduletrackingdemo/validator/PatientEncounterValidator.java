@@ -1,3 +1,4 @@
+/*
 package org.motechproject.scheduletrackingdemo.validator;
 
 import java.util.Date;
@@ -6,7 +7,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsConceptConverter;
-import org.motechproject.scheduletrackingdemo.beans.PatientEncounterBean;
+import org.motechproject.scheduletrackingdemo.domain.PatientEncounterBean;
 import org.motechproject.mobileforms.api.domain.FormError;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -53,3 +54,4 @@ public class PatientEncounterValidator extends AbstractPatientValidator<PatientE
 		}
 	}
 }
+*/

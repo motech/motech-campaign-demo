@@ -1,3 +1,4 @@
+/*
 package org.motechproject.scheduletrackingdemo;
 
 import org.motechproject.scheduletrackingdemo.validator.PatientEncounterValidator;
@@ -33,3 +34,4 @@ public class FormValidatorRegister implements ServletContextAware {
 		servletContext.setAttribute(PatientEncounterValidator.class.getName(), patientEncounterValidator);
 	}
 }
+*/

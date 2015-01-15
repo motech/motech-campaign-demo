@@ -8,7 +8,6 @@ import org.motechproject.scheduletracking.domain.Milestone;
 import org.motechproject.scheduletracking.domain.Schedule;
 import org.motechproject.scheduletracking.service.EnrollmentRecord;
 import org.motechproject.scheduletracking.service.EnrollmentRequest;
-import org.motechproject.scheduletracking.service.EnrollmentService;
 import org.motechproject.scheduletracking.service.ScheduleTrackingService;
 import org.motechproject.scheduletrackingdemo.dao.PatientDataService;
 import org.motechproject.scheduletrackingdemo.model.Patient;
@@ -32,9 +31,6 @@ public class PatientScheduler {
 
 	@Autowired
 	private ScheduleTrackingService scheduleTrackingService;
-	
-	@Autowired
-	private EnrollmentService enrollmentService;
 	
 	public void enrollIntoSchedule(String externalID, String scheduleName) {
 		if (patientDataService.findByExternalId(externalID) != null &&

@@ -1,10 +1,6 @@
-package org.motechproject.scheduletrackingdemo.beans;
+package org.motechproject.scheduletrackingdemo.domain;
 
-import org.motechproject.mobileforms.api.domain.FormBean;
-
-public class PatientEnrollmentBean extends FormBean {
-
-	private static final long serialVersionUID = 1L;
+public class PatientEnrollmentBean {
 	
 	private String motechId;
 	private String phoneNumber;

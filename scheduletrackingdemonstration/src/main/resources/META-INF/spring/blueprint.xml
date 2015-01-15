@@ -11,20 +11,21 @@
             http://www.eclipse.org/gemini/blueprint/schema/blueprint http://www.eclipse.org/gemini/blueprint/schema/blueprint/gemini-blueprint.xsd">
 
 	<context:annotation-config/>
-	<context:component-scan base-package="org.motechproject.campaigndemo"/>
+	<context:component-scan base-package="org.motechproject.scheduletrackingdemo"/>
 
 	<mvc:annotation-driven/>
 
 	<util:properties id="scheduleMessages" location="classpath:schedulemessages.properties" />
 
 	<!-- The data service for our entity -->
-	<osgi:reference id="patientDataServiceOSGi" interface="org.motechproject.campaigndemo.dao.PatientDataService"/>
+	<osgi:reference id="patientDataServiceOSGi" interface="org.motechproject.scheduletrackingdemo.dao.PatientDataService"/>
 
 	<!-- OSGi references for the MOTECH service coming from other modules that we use -->
 
 	<osgi:reference id="smsServiceOSGi" interface="org.motechproject.sms.service.SmsService"/>
 	<osgi:reference id="ivrServiceOSGi" interface="org.motechproject.ivr.service.OutboundCallService"/>
 	<osgi:reference id="cmsLiteServiceOSGi" interface="org.motechproject.cmslite.service.CMSLiteService"/>
+    <osgi:reference id="scheduleTrackingServiceOSGi" interface="org.motechproject.scheduletracking.service.ScheduleTrackingService"/>
 
 	<osgi:reference id="patientServiceOSGi" interface="org.motechproject.openmrs19.service.OpenMRSPatientService"/>
 	<osgi:reference id="observationServiceOSGi" interface="org.motechproject.openmrs19.service.OpenMRSObservationService"/>

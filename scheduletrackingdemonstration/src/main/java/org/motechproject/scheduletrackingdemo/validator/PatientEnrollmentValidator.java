@@ -1,9 +1,10 @@
+/*
 package org.motechproject.scheduletrackingdemo.validator;
 
 import java.util.List;
 
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
-import org.motechproject.scheduletrackingdemo.beans.PatientEnrollmentBean;
+import org.motechproject.scheduletrackingdemo.domain.PatientEnrollmentBean;
 import org.motechproject.mobileforms.api.domain.FormError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,3 +26,4 @@ public class PatientEnrollmentValidator extends AbstractPatientValidator<Patient
 		return errors;
 	}
 }
+*/
