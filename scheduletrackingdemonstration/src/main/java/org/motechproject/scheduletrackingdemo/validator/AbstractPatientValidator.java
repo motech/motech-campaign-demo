@@ -1,14 +1,11 @@
-/*
 package org.motechproject.scheduletrackingdemo.validator;
 
-import java.util.List;
-
+import org.motechproject.openmrs19.domain.OpenMRSPatient;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
-import org.motechproject.mobileforms.api.domain.FormBean;
-import org.motechproject.mobileforms.api.domain.FormError;
-import org.motechproject.mrs.model.MRSPatient;
 
-public abstract class AbstractPatientValidator<V extends FormBean> extends AbstractMobileValidator<V> {
+import java.util.Map;
+
+public abstract class AbstractPatientValidator extends AbstractMobileValidator {
 
 	protected OpenMrsClient openmrsClient;
 
@@ -16,11 +13,11 @@ public abstract class AbstractPatientValidator<V extends FormBean> extends Abstr
 		this.openmrsClient = openmrsClient;
 	}
 
-	protected void validateOpenMrsPatientExists(String motechId, List<FormError> errors) {
-		MRSPatient existingPatient = openmrsClient.getPatientByMotechId(motechId);
+	protected void validateOpenMrsPatientExists(String motechId, Map<String, String> errors) {
+		OpenMRSPatient existingPatient = openmrsClient.getPatientByMotechId(motechId);
 		if (existingPatient == null) {
-			errors.add(new FormError("motechId", "Could not find OpenMRS Patient with this MoTeCH Id"));
+			errors.put("motechId", "Could not find OpenMRS Patient with this MoTeCH Id");
 		}		
 	}
 
-}*/
+}

@@ -5,6 +5,8 @@ import org.motechproject.scheduletrackingdemo.dao.PatientDataService;
 import org.motechproject.scheduletrackingdemo.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import java.util.TreeMap;
  *
  */
 @Controller
+@RequestMapping("/patient")
 public class PatientController {
 
 	@Autowired
@@ -28,10 +31,12 @@ public class PatientController {
 	@Autowired 
 	private PatientScheduler patientScheduler;
 
+    @RequestMapping(value = "/addScheduleUser", method = RequestMethod.POST)
 	public ModelAndView addScheduleUser(HttpServletRequest request, HttpServletResponse response) {
 		return add("scheduleTrackingPage", request);
 	}
 
+    @RequestMapping(value = "/removeScheduleUser", method = RequestMethod.POST)
 	public ModelAndView removeScheduleUser(HttpServletRequest request, HttpServletResponse response) {
 		return remove("scheduleTrackingPage", request);
 	}

@@ -21,13 +21,13 @@
 	number. 
 	<br><br>
 	Register a patient into Motech
-	<form method="post" action="/motech-platform-server/patient/addScheduleUser">
+	<form method="post" action="../patient/addScheduleUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" />
 		Phone Number (with no special characters, like in 2071234567):<input type="text" name="phoneNum" size="24"
 			maxlength="24" /> <input type="submit" value="Register Motech Patient" />
 	</form>
 	Unregister a Patient from the system
-	<form method="post" action="/motech-platform-server/patient/removeScheduleUser">
+	<form method="post" action="../patient/removeScheduleUser">
 		ID:<input type="text" name="externalId" size="12" maxlength="12" /> <input
 			type="submit" value="Unregister Motech Patient" />
 	</form>
@@ -35,14 +35,14 @@
 	<br><br>
 
 	Enroll a patient by Motech ID (coincides with Open MRS) into the Demo Concept Schedule
-	<form method="post" action="/motech-platform-server/enroll/start">
+	<form method="post" action="../enroll/start">
 		ID:<input type="text" name="externalID" size="12" maxlength="12" />
 		<input type="hidden" name="scheduleName" value="Demo Concept Schedule">
 		<input type="submit" value="Enroll User" />
 	</form>
 	<br><br>
 	Unenroll a patient by Motech ID (coincides with Open MRS) from the Demo Concept Schedule
-	<form method="post" action="/motech-platform-server/enroll/stop">
+	<form method="post" action="../enroll/stop">
 		ID:<input type="text" name="externalID" size="12" maxlength="12" />
 		<input type="hidden" name="scheduleName" value="Demo Concept Schedule">
 		<input type="submit" value="Uneroll User" />
@@ -52,7 +52,7 @@
 	<table>
 		<c:forEach var="patients" items="${patients}">
 			<tr>
-				<td>${patients.externalid}</td>
+				<td>${patients.externalId}</td>
 			</tr>
 		</c:forEach>
 	</table>

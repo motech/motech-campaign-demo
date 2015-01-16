@@ -1,29 +1,26 @@
-/*
 package org.motechproject.scheduletrackingdemo.validator;
 
-import java.util.List;
-
+import org.motechproject.scheduletrackingdemo.domain.PatientEnrollment;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
-import org.motechproject.scheduletrackingdemo.domain.PatientEnrollmentBean;
-import org.motechproject.mobileforms.api.domain.FormError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
-public class PatientEnrollmentValidator extends AbstractPatientValidator<PatientEnrollmentBean> {
+public class PatientEnrollmentValidator extends AbstractPatientValidator {
 
 	@Autowired
 	public PatientEnrollmentValidator(OpenMrsClient openmrsClient) {
 		super(openmrsClient);
 	}
 
-	@Override
-	public List<FormError> validate(PatientEnrollmentBean formBean) {
-		List<FormError> errors = super.validate(formBean);
+	public Map<String, String> validate(PatientEnrollment formBean) {
+        Map<String, String> errors = new HashMap<>();
 		validatePhoneNumberFormat(formBean.getPhoneNumber(), errors);
 		validateOpenMrsPatientExists(formBean.getMotechId(), errors);
 		
 		return errors;
 	}
 }
-*/

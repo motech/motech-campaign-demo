@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:orx="http://openrosa.org/jr/xforms" xmlns="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:vellum="http://commcarehq.org/xforms/vellum">
+	<h:head>
+		<h:title>Enrollment</h:title>
+		<model>
+			<instance>
+				<data xmlns:jrm="http://dev.commcarehq.org/jr/xforms" xmlns="http://openrosa.org/formdesigner/46268E37-7B5A-4CD0-96E0-F7A4351607A2" uiVersion="1" version="1" name="Enrollment">
+					<motechId />
+					<phoneNumber />
+				</data>
+			</instance>
+			<bind nodeset="/data/motechId" type="xsd:string" />
+			<bind nodeset="/data/phoneNumber" type="xsd:string" />
+			<itext>
+				<translation lang="en" default="">
+					<text id="motechId-label">
+						<value>MOTECH ID</value>
+					</text>
+					<text id="phoneNumber-label">
+						<value>Phone number</value>
+					</text>
+				</translation>
+			</itext>
+		</model>
+	</h:head>
+	<h:body>
+		<input ref="/data/motechId">
+			<label ref="jr:itext('motechId-label')" />
+		</input>
+		<input ref="/data/phoneNumber">
+			<label ref="jr:itext('phoneNumber-label')" />
+		</input>
+	</h:body>
+</h:html>

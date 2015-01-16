@@ -1,26 +1,26 @@
-/*
 package org.motechproject.scheduletrackingdemo.validator;
 
-import java.util.Date;
-import java.util.List;
-
 import org.joda.time.DateTime;
+import org.motechproject.scheduletrackingdemo.domain.PatientEncounter;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsConceptConverter;
-import org.motechproject.scheduletrackingdemo.domain.PatientEncounterBean;
-import org.motechproject.mobileforms.api.domain.FormError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class PatientEncounterValidator extends AbstractPatientValidator<PatientEncounterBean> {
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+public class PatientEncounterValidator extends AbstractPatientValidator {
 	
 	@Autowired
 	public PatientEncounterValidator(OpenMrsClient openmrsClient) {
 		super(openmrsClient);
 	}
 
-	@Override
-	public List<FormError> validate(PatientEncounterBean formBean) {
-		List<FormError> errors = super.validate(formBean);
+	public Map<String, String> validate(PatientEncounter formBean) {
+        Map<String, String> errors = new HashMap<>();
 		validateOpenMrsPatientExists(formBean.getMotechId(), errors);
 		if (errors.size() > 0) {
 			// no point in other validation checks if patient doesn't exist in system
@@ -33,25 +33,24 @@ public class PatientEncounterValidator extends AbstractPatientValidator<PatientE
 		return errors;
 	}
 
-	private void validateValidNextConcept(String motechId, String conceptName, Date fulfilledDate, List<FormError> errors) {
+	private void validateValidNextConcept(String motechId, String conceptName, Date fulfilledDate, Map<String, String> errors) {
 		String previousConcept = OpenMrsConceptConverter.getConceptBefore(conceptName);
 		if (!previousConcept.equals(conceptName)) {
 			if (!openmrsClient.hasConcept(motechId, previousConcept)) {
-				errors.add(new FormError("observedConcept", "Patient has not fulfilled previous concept: " + previousConcept));
+				errors.put("observedConcept", "Patient has not fulfilled previous concept: " + previousConcept);
 				return;
 			}
 			
 			if (openmrsClient.hasConcept(motechId, conceptName)) {
-				errors.add(new FormError("observedConcept", "Patient already has concept: " + conceptName));
+				errors.put("observedConcept", "Patient already has concept: " + conceptName);
 				return;
 			}
 			
 			DateTime lastFulfilledDate = openmrsClient.lastTimeFulfilledDateTimeObs(motechId, previousConcept);
 			DateTime currentFufilledDate = new DateTime(fulfilledDate);
 			if (currentFufilledDate.isBefore(lastFulfilledDate)) {
-				errors.add(new FormError("observedDate", "Current fufill date is before last fulfill date"));
+				errors.put("observedDate", "Current fufill date is before last fulfill date");
 			}
 		}
 	}
 }
-*/

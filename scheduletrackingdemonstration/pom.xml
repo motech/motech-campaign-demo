@@ -49,8 +49,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Context-Path>campaign-demonstration</Context-Path>
-						<Resource-Path>campaign-demonstration/resource</Resource-Path>
+						<Context-Path>scheduletracking-demo</Context-Path>
+						<Resource-Path>scheduletracking-demo/resource</Resource-Path>
 						<Blueprint-Enabled>true</Blueprint-Enabled>
 						<Export-Package>
 							org.motechproject.scheduletrackingdemo.model;version=${project.version},

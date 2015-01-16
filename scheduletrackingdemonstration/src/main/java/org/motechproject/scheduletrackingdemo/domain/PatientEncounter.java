@@ -2,7 +2,7 @@ package org.motechproject.scheduletrackingdemo.domain;
 
 import java.util.Date;
 
-public class PatientEncounterBean {
+public class PatientEncounter {
 
 	private String motechId;
 	private Date observedDate;

@@ -8,9 +8,15 @@ import org.motechproject.openmrs19.domain.OpenMRSFacility;
 import org.motechproject.openmrs19.domain.OpenMRSPatient;
 import org.motechproject.openmrs19.domain.OpenMRSPerson;
 import org.motechproject.scheduletrackingdemo.PatientScheduler;
+import org.motechproject.scheduletrackingdemo.domain.PatientEncounter;
+import org.motechproject.scheduletrackingdemo.domain.PatientEnrollment;
 import org.motechproject.scheduletrackingdemo.domain.PatientRegistration;
 import org.motechproject.scheduletrackingdemo.event.CommcareEventsParser;
 import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsClient;
+import org.motechproject.scheduletrackingdemo.openmrs.OpenMrsConceptConverter;
+import org.motechproject.scheduletrackingdemo.validator.PatientEncounterValidator;
+import org.motechproject.scheduletrackingdemo.validator.PatientEnrollmentValidator;
+import org.motechproject.scheduletrackingdemo.validator.PatientRegistrationValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +27,23 @@ import java.util.Map;
 @Component
 public class MobileFormListener {
 	private static final String DEMO_SCHEDULE_NAME = "Demo Concept Schedule";
+	private static final Logger LOG = LoggerFactory.getLogger(MobileFormListener.class);
+	
+	@Autowired
+	private OpenMrsClient openmrsClient;
+	
+	@Autowired
+	private PatientScheduler patientScheduler;
 
-	Logger logger = LoggerFactory.getLogger(MobileFormListener.class);
-	
-	@Autowired
-	OpenMrsClient openmrsClient;
-	
-	@Autowired
-	PatientScheduler patientScheduler;
+    @Autowired
+    private PatientRegistrationValidator registrationValidator;
+
+    @Autowired
+    private PatientEnrollmentValidator enrollmentValidator;
+
+    @Autowired
+    private PatientEncounterValidator encounterValidator;
+
 	
 	@MotechListener(subjects = { "org.motechproject.commcare.api.forms" })
 	public void handleFormEvent(MotechEvent event) {
@@ -36,11 +51,24 @@ public class MobileFormListener {
 
         if ("Registration".equals(formType)) {
             handleRegistrationForm(event.getParameters());
+        } else if ("Encounter".equals(formType)) {
+            handleEncounterForm(event.getParameters());
+        } else if ("Enrollment".equals(formType)) {
+            handleEnrollmentForm(event.getParameters());
         }
 	}
 
     private void handleRegistrationForm(Map<String, Object> parameters) {
         PatientRegistration bean = CommcareEventsParser.parseEventToPatientRegistration((Multimap) parameters.get("subElements"));
+
+        Map<String, String> errors = registrationValidator.validate(bean);
+        if (!errors.isEmpty()) {
+            LOG.error("The validation of a registration form has failed for the following fields: ");
+            for (Map.Entry<String, String> entry : errors.entrySet()) {
+                LOG.error("Field: {} - Cause: {}", entry.getKey(), entry.getValue());
+            }
+            return;
+        }
 
         OpenMRSPerson person = new OpenMRSPerson(bean.getMotechId());
         person.setFirstName(bean.getFirstName());
@@ -60,21 +88,40 @@ public class MobileFormListener {
         }
     }
 
+    private void handleEnrollmentForm(Map<String, Object> parameters) {
+        PatientEnrollment enrollment = CommcareEventsParser.parseEventToPatientEnrollment((Multimap) parameters.get("subElements"));
+
+        Map<String, String> errors = enrollmentValidator.validate(enrollment);
+        if (!errors.isEmpty()) {
+            LOG.error("The validation of an enrollment form has failed for the following fields: ");
+            for (Map.Entry<String, String> entry : errors.entrySet()) {
+                LOG.error("Field: {} - Cause: {}", entry.getKey(), entry.getValue());
+            }
+            return;
+        }
+
+        patientScheduler.saveMotechPatient(enrollment.getMotechId(), stripDashFromPhoneNumber(enrollment.getPhoneNumber()));
+        patientScheduler.enrollIntoSchedule(enrollment.getMotechId(), DEMO_SCHEDULE_NAME);
+    }
+
+    private void handleEncounterForm(Map<String, Object> parameters) {
+        PatientEncounter encounter = CommcareEventsParser.parseEventToPatientEncounter((Multimap) parameters.get("subElements"));
+
+        Map<String, String> errors = encounterValidator.validate(encounter);
+        if (!errors.isEmpty()) {
+            LOG.error("The validation of an encounter form has failed for the following fields: ");
+            for (Map.Entry<String, String> entry : errors.entrySet()) {
+                LOG.error("Field: {} - Cause: {}", entry.getKey(), entry.getValue());
+            }
+            return;
+        }
+
+        String conceptName = OpenMrsConceptConverter.convertToNameFromIndex(encounter.getObservedConcept());
+        openmrsClient.addEncounterForPatient(encounter.getMotechId(), conceptName, encounter.getObservedDate());
+    }
+
     private String stripDashFromPhoneNumber(String phoneNum) {
 		return phoneNum.replaceAll("-", "");
 	}
-	
-	//@MotechListener(subjects = { FormPublisher.FORM_VALIDATION_SUCCESSFUL + ".DemoGroup.DemoPatientEnrollment" })
-	public void handlePatientEnrollment(MotechEvent event) {
-		//PatientEnrollmentBean bean = (PatientEnrollmentBean)event.getParameters().get(FormPublisher.FORM_BEAN);
-		//patientScheduler.saveMotechPatient(bean.getMotechId(), stripDashFromPhoneNumber(bean.getPhoneNumber()));
-		//patientScheduler.enrollIntoSchedule(bean.getMotechId(), DEMO_SCHEDULE_NAME);
-	}
-	
-	//@MotechListener(subjects = { FormPublisher.FORM_VALIDATION_SUCCESSFUL + ".DemoGroup.DemoPatientEncounter" })
-	public void handlePatientEncounter(MotechEvent event) {
-		//PatientEncounterBean bean = (PatientEncounterBean)event.getParameters().get(FormPublisher.FORM_BEAN);
-		//String conceptName = OpenMrsConceptConverter.convertToNameFromIndex(bean.getObservedConcept());
-		//openmrsClient.addEncounterForPatient(bean.getMotechId(), conceptName, bean.getObservedDate());
-	}
+
 }

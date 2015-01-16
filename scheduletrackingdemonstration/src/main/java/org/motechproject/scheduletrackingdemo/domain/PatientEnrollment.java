@@ -1,6 +1,6 @@
 package org.motechproject.scheduletrackingdemo.domain;
 
-public class PatientEnrollmentBean {
+public class PatientEnrollment {
 	
 	private String motechId;
 	private String phoneNumber;
