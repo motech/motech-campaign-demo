@@ -25,9 +25,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class MobileFormListener {
+public class CommcareFormListener {
 	private static final String DEMO_SCHEDULE_NAME = "Demo Concept Schedule";
-	private static final Logger LOG = LoggerFactory.getLogger(MobileFormListener.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommcareFormListener.class);
 	
 	@Autowired
 	private OpenMrsClient openmrsClient;
