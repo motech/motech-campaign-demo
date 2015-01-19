@@ -1,0 +1,22 @@
+Schedule tracking Demo Implementation
+
+Controllers:
+The demo defines its own controllers and a simple view. The page is located under:
+<motech-platform-address>/module/scheduletracking-demo/enroll/scheduleTracking
+
+Via the webpage, you can register patients, that will be added to the test database and enroll patients to the
+Demo Concept Schedule.
+
+The demo implementation also registers listeners, one to handle Commcare forms and another to handle schedule-tracking
+milestones.
+
+The first one will listen to all form events, sent by Commcare (indicating that CommCare has received a form
+and managed to parse it properly). The demo listener will check the form CommCare notifies about, via the form name.
+The listener expects either Registration, Encounter or Enrollment form. The demo listener will use its own validators
+to verify the fields of the forms have expected values. If the values are correct, the demo will attempt to perform
+actions on OpenMRS patient (of the given MOTECH Id, passed in the CommCare form).
+
+The second listener handles milestone events sent by the schedule-tracking module.
+
+The parent pom was modified to include the campaign demo project as a module
+

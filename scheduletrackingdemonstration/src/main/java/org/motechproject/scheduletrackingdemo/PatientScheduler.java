@@ -58,7 +58,7 @@ public class PatientScheduler {
 
 			EnrollmentRequest enrollmentRequest = new EnrollmentRequest().setExternalId(externalID)
 					.setScheduleName(scheduleName).setEnrollmentDate(now.toLocalDate())
-					.setEnrollmentTime(new Time(now.getHourOfDay(), now.getMinuteOfHour()));;
+					.setEnrollmentTime(new Time(now.getHourOfDay(), now.getMinuteOfHour()));
 
 			if (StringUtils.isNotBlank(lastConceptFulfilled)) { //start at the next milestone
 				EnrollmentRecord enrollment = scheduleTrackingService.getEnrollment(externalID, scheduleName);
