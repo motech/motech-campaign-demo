@@ -1,5 +1,11 @@
 Schedule tracking Demo Implementation
 
+External systems used in the demo implementation:
+- CommCareHQ
+- OpenMRS (with Rest Web Services module, version 2.4)
+
+To successfully complete demo, you will need an instance of these two systems.
+
 Controllers:
 The demo defines its own controllers and a simple view. The page is located under:
 <motech-platform-address>/module/scheduletracking-demo/enroll/scheduleTracking
@@ -7,16 +13,37 @@ The demo defines its own controllers and a simple view. The page is located unde
 Via the webpage, you can register patients, that will be added to the test database and enroll patients to the
 Demo Concept Schedule.
 
-The demo implementation also registers listeners, one to handle Commcare forms and another to handle schedule-tracking
-milestones.
+The demo implementation also registers two event listeners. One for Commcare form events, sent upon receiving a form and
+another for the events sent by the Schedule tracking module. The form schema for CommCareHQ is located in the commcare.schema
+package and the schema for scheduletracking in the resource package. The event handlers present the integration between
+Commcare, OpenMRS and Scedule tracking modules. The event handlers are explained in details in the next paragraphs.
 
-The first one will listen to all form events, sent by Commcare (indicating that CommCare has received a form
-and managed to parse it properly). The demo listener will check the form CommCare notifies about, via the form name.
-The listener expects either Registration, Encounter or Enrollment form. The demo listener will use its own validators
-to verify the fields of the forms have expected values. If the values are correct, the demo will attempt to perform
-actions on OpenMRS patient (of the given MOTECH Id, passed in the CommCare form).
+Before starting to work with the demo implementation, you must prepare your CommCareHQ and OpenMRS instance. First, access
+the CommCareHQ and upload the forms schema, present in the commcare.schema folder. Then access MOTECH Commcare module
+and connect it with your CommCareHQ instance, by providing necessary data. Finally, enable data forwarding for forms,
+either via MOTECH Commcare module or via CommCareHQ instance. For OpenMRS, you are supposed to prepare some sample data.
+Access your OpenMRS instance and under Administration tab, click "View Concept Dictionary" and add four new concepts named:
+Demo Concept Question #1, Demo Concept Question #2, Demo Concept Question #3, Demo Concept Question #4. Make sure to set the
+datatype in all of them to "Date". Get back to Administration and click on locations. Add at least one location of any name.
+Get back to Administration and click "Manage providers". Click "Add Provider" and add provider for person linked with the
+initial admin user (by default the person name is "Super User"). Get back to Administration and click on "Manage Encounter
+Types". Click "Add Encounter Type" and add type of name "ADULTRETURN", with any description.
 
-The second listener handles milestone events sent by the schedule-tracking module.
+The three Commcare event handlers are responsible for registration, encounter and enrolling users. The demo listener
+will use its own validators to verify the fields of the forms have expected values. If the values are correct, the demo
+will attempt to perform actions on OpenMRS patient (of the given MOTECH Id, passed in the CommCare form). The registration
+form event adds a new patient to the OpenMRS database. The encounter event adds an information to the OpenMRS patient about
+patient visiting the facility on a specified day. The enrollment form event, simply enrolls user into the schedule.
 
-The parent pom was modified to include the campaign demo project as a module
+The ScheduleTracking event handlers simply listen to the events fired by the schedule tracking module. They include
+alerts, indicating that patients are late with their visits or that the concept has been defaulted. The demo will
+send SMS message and place IVR call upon each event and attempt to send messages and calls, retrieved from the CMS Lite
+module. that are added automatically at the demo module startup.
 
+Demo workflow:
+-> Register patient, either via sending CommCareHQ form or registering patient directly in OpenMRS and in Demo module, via
+   simple demo page (link provided above).
+-> Enroll user into schedule, either via sending CommCareHQ form or by accessing the demo page and typing in user ID that
+   should be enrolled.
+-> Receive notifications from the schedule-tracking module about required visits.
+-> Fulfill milestones by completing encounters. The encounter can be completed by sending CommCareHQ form.

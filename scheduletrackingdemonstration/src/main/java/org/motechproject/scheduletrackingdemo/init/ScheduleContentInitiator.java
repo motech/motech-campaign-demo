@@ -7,6 +7,7 @@ import org.motechproject.cmslite.model.Content;
 import org.motechproject.cmslite.model.StreamContent;
 import org.motechproject.cmslite.model.StringContent;
 import org.motechproject.cmslite.service.CMSLiteService;
+import org.motechproject.scheduletracking.service.ScheduleTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,9 @@ public class ScheduleContentInitiator {
 	 */
 	@Autowired
 	private CMSLiteService cmsliteService;
+
+    @Autowired
+    private ScheduleTrackingService scheduleTrackingService;
 	
 	@Autowired
 	@Qualifier(value = "scheduleMessages")
@@ -60,6 +64,14 @@ public class ScheduleContentInitiator {
         }
 
         addToCmsLite(new StringContent("en", "defaulted-demo-message", "You have defaulted on your Demo Concept Schedule. Please visit your doctor for more information."));
+
+        InputStream inputStream = null;
+        try {
+            inputStream = getClass().getClassLoader().getResource("simple-schedule.json").openStream();
+            scheduleTrackingService.add(IOUtils.toString(inputStream));
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
         
 	}
 

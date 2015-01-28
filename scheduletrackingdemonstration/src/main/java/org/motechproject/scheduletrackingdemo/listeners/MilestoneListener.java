@@ -56,14 +56,13 @@ public class MilestoneListener {
 		LOG.info("For: " + mEvent.getExternalId() + " --- " + mEvent.getWindowName() + " --- "
 				+ mEvent.getScheduleName() + " --- " + mEvent.getWindowName());
 
-		String milestoneConceptName = (String) event.getParameters().get("conceptName");
+		String milestoneConceptName = mEvent.getMilestoneData().get("conceptName");
 
 		if (milestoneConceptName == null) {
 			return; //This method does not handle events without conceptName
 		}
 		
-		boolean hasFulfilledMilestone = openmrsClient.hasConcept(
-				mEvent.getExternalId(), milestoneConceptName);
+		boolean hasFulfilledMilestone = openmrsClient.hasConcept(mEvent.getExternalId(), milestoneConceptName);
 
 		if (hasFulfilledMilestone && mEvent.getReferenceDateTime().minusDays(1).isBefore(openmrsClient.lastTimeFulfilledDateTimeObs(mEvent.getExternalId(), milestoneConceptName))) {
 			LOG.debug("Fulfilling milestone for: " + mEvent.getExternalId()
@@ -76,17 +75,17 @@ public class MilestoneListener {
 			
 			if (patient != null) {
 				
-				String IVRFormat = (String) event.getParameters().get("IVRFormat");
-				String SMSFormat = (String) event.getParameters().get("SMSFormat");
-				String language = (String) event.getParameters().get("language");
-				String messageName = (String) event.getParameters().get("messageName");
-				
+				String IVRFormat = mEvent.getMilestoneData().get("IVRFormat");
+				String SMSFormat = mEvent.getMilestoneData().get("SMSFormat");
+				String language = mEvent.getMilestoneData().get("language");
+				String messageName = mEvent.getMilestoneData().get("messageName");
 
+
+                if ("true".equals(SMSFormat) && language != null && messageName != null) {
+                    sendSMS(patient, language, messageName, mEvent.getWindowName());
+                }
 				if ("true".equals(IVRFormat) && language != null && messageName != null) {
 					placeCall(patient, language, messageName, mEvent.getWindowName());
-				}
-				if ("true".equals(SMSFormat) && language != null && messageName != null) {
-					sendSMS(patient, language, messageName, mEvent.getWindowName());
 				}
 			}
 		}

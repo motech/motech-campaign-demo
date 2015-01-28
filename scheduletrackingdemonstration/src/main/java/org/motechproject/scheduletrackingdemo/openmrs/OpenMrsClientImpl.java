@@ -5,6 +5,7 @@ import org.motechproject.openmrs19.domain.OpenMRSEncounter;
 import org.motechproject.openmrs19.domain.OpenMRSFacility;
 import org.motechproject.openmrs19.domain.OpenMRSObservation;
 import org.motechproject.openmrs19.domain.OpenMRSPatient;
+import org.motechproject.openmrs19.domain.OpenMRSProvider;
 import org.motechproject.openmrs19.domain.OpenMRSUser;
 import org.motechproject.openmrs19.service.OpenMRSEncounterService;
 import org.motechproject.openmrs19.service.OpenMRSFacilityService;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -27,6 +30,8 @@ import java.util.Set;
 public class OpenMrsClientImpl implements OpenMrsClient {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OpenMrsClientImpl.class);
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired
 	private OpenMRSEncounterService encounterService;
@@ -79,8 +84,7 @@ public class OpenMrsClientImpl implements OpenMrsClient {
 		Collections.sort(mrsObservations, new DateComparator());
 		
 		if (mrsObservations.size() > 0) {
-			Date date = (Date) mrsObservations.get(0).getValue();
-			return new DateTime(date);
+			return new DateTime(mrsObservations.get(0).getValue());
 		}
 
 		return new DateTime();
@@ -113,15 +117,17 @@ public class OpenMrsClientImpl implements OpenMrsClient {
 	}
 
 	public void addEncounterForPatient(String motechId, String conceptName, Date observedDate) {
-		OpenMRSObservation<Date> observation = new OpenMRSObservation<>(observedDate, conceptName, observedDate);
-		Set<OpenMRSObservation> observations = new HashSet<OpenMRSObservation>();
+		OpenMRSObservation<String> observation = new OpenMRSObservation<>(observedDate, conceptName, DATE_FORMAT.format(observedDate));
+		Set<OpenMRSObservation> observations = new HashSet<>();
 		observations.add(observation);
 		OpenMRSPatient patient = patientService.getPatientByMotechId(motechId);
 
-		OpenMRSFacility facility = facilityService.getFacility("1");
+        List<? extends OpenMRSFacility> facilities = facilityService.getFacilities();
+		OpenMRSFacility facility = facilities.isEmpty() ?  null : facilities.get(0);
+
 		OpenMRSUser user = userService.getUserByUserName("admin");
 
-		OpenMRSEncounter encounter = new OpenMRSEncounter(null, user, facility, observedDate, patient, observations, "ADULTRETURN");
+		OpenMRSEncounter encounter = new OpenMRSEncounter(new OpenMRSProvider(user.getPerson()), user, facility, observedDate, patient, observations, "ADULTRETURN");
 		encounterService.createEncounter(encounter);
 	}
 }

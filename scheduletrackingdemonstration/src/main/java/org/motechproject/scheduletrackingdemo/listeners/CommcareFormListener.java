@@ -7,6 +7,7 @@ import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.openmrs19.domain.OpenMRSFacility;
 import org.motechproject.openmrs19.domain.OpenMRSPatient;
 import org.motechproject.openmrs19.domain.OpenMRSPerson;
+import org.motechproject.openmrs19.service.OpenMRSFacilityService;
 import org.motechproject.scheduletrackingdemo.PatientScheduler;
 import org.motechproject.scheduletrackingdemo.domain.PatientEncounter;
 import org.motechproject.scheduletrackingdemo.domain.PatientEnrollment;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -31,6 +33,9 @@ public class CommcareFormListener {
 	
 	@Autowired
 	private OpenMrsClient openmrsClient;
+
+    @Autowired
+    private OpenMRSFacilityService facilityService;
 	
 	@Autowired
 	private PatientScheduler patientScheduler;
@@ -77,7 +82,9 @@ public class CommcareFormListener {
         person.setBirthDateEstimated(false);
         person.setGender(bean.getGender());
 
-        OpenMRSFacility facility = new OpenMRSFacility("1");
+        List<? extends OpenMRSFacility> facilities = facilityService.getFacilities();
+        OpenMRSFacility facility = facilities.isEmpty() ?  null : facilities.get(0);
+
         OpenMRSPatient patient = new OpenMRSPatient(bean.getMotechId(), person, facility);
 
         openmrsClient.savePatient(patient);
