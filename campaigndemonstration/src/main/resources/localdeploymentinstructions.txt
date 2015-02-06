@@ -1,18 +1,6 @@
 Local deployment instructions for campaign demo
 
-Checkout the latest code from the motech-campaigndemo branch from the Google code location, using Git: http://code.google.com/p/motech
-
-Run a Maven clean install on the parent Motech project, which will package a WAR file named motech-platform-server.
-
-Set up the environment. The demo requires a running activemq broker and CouchDB.
-
-ActiveMQ can be obtained from http://activemq.apache.org/download.html
-Run activemq from the bin folder, using the default port
-
-CouchDB needs to be set up on port 5984 (default) - http://couchdb.apache.org/downloads.html
-When CouchDB is set up, you shoudl be able to access it from: http://localhost:5984/_utils/index.html
-
-Deploy the demo WAR to an application server, e.g., Tomcat 7.0. Start the server.
+Set up the environment. The demo requires a running MOTECH instance, refer to http://docs.motechproject.org
 
 In order for Voxeo to interact with your local server, you need a Voxeo developer account. You can sign up here: http://evolution.voxeo.com/
 
