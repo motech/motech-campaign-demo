@@ -28,19 +28,18 @@ public class CampaignControllerTest {
     private PatientDataService patientDataService;
 
     @Test
-    public void testStartCampaign () {
-    	ModelAndView modelAndView = campaignController.start("externalId", "campaignName");
-    	assertEquals("formPage", modelAndView.getViewName());
+    public void testStartCampaign() {
+        ModelAndView modelAndView = campaignController.start("externalId", "campaignName");
+        assertEquals("formPage", modelAndView.getViewName());
         verify(service).enroll(any(CampaignRequest.class));
     }
-    
+
     @Test
     public void testStopCampaign() {
-    	ModelAndView modelAndView = campaignController.stop("externalId", "campaignName");
-    	assertEquals("formPage", modelAndView.getViewName());
+        ModelAndView modelAndView = campaignController.stop("externalId", "campaignName");
+        assertEquals("formPage", modelAndView.getViewName());
         verify(service).stopAll(any(CampaignEnrollmentsQuery.class));
     }
-    
-    
-    
+
+
 }

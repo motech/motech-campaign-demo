@@ -28,17 +28,17 @@ import java.util.Map;
 
 @Component
 public class CommcareFormListener {
-	private static final String DEMO_SCHEDULE_NAME = "Demo Concept Schedule";
-	private static final Logger LOG = LoggerFactory.getLogger(CommcareFormListener.class);
-	
-	@Autowired
-	private OpenMrsClient openmrsClient;
+    private static final String DEMO_SCHEDULE_NAME = "Demo Concept Schedule";
+    private static final Logger LOG = LoggerFactory.getLogger(CommcareFormListener.class);
+
+    @Autowired
+    private OpenMrsClient openmrsClient;
 
     @Autowired
     private OpenMRSFacilityService facilityService;
-	
-	@Autowired
-	private PatientScheduler patientScheduler;
+
+    @Autowired
+    private PatientScheduler patientScheduler;
 
     @Autowired
     private PatientRegistrationValidator registrationValidator;
@@ -49,9 +49,9 @@ public class CommcareFormListener {
     @Autowired
     private PatientEncounterValidator encounterValidator;
 
-	
-	@MotechListener(subjects = { "org.motechproject.commcare.api.forms" })
-	public void handleFormEvent(MotechEvent event) {
+
+    @MotechListener(subjects = {"org.motechproject.commcare.api.forms"})
+    public void handleFormEvent(MotechEvent event) {
         String formType = ((Map) event.getParameters().get("attributes")).get("name").toString();
 
         if ("Registration".equals(formType)) {
@@ -61,7 +61,7 @@ public class CommcareFormListener {
         } else if ("Enrollment".equals(formType)) {
             handleEnrollmentForm(event.getParameters());
         }
-	}
+    }
 
     private void handleRegistrationForm(Map<String, Object> parameters) {
         PatientRegistration bean = CommcareEventsParser.parseEventToPatientRegistration((Multimap) parameters.get("subElements"));
@@ -83,7 +83,7 @@ public class CommcareFormListener {
         person.setGender(bean.getGender());
 
         List<? extends OpenMRSFacility> facilities = facilityService.getFacilities();
-        OpenMRSFacility facility = facilities.isEmpty() ?  null : facilities.get(0);
+        OpenMRSFacility facility = facilities.isEmpty() ? null : facilities.get(0);
 
         OpenMRSPatient patient = new OpenMRSPatient(bean.getMotechId(), person, facility);
 
@@ -128,7 +128,7 @@ public class CommcareFormListener {
     }
 
     private String stripDashFromPhoneNumber(String phoneNum) {
-		return phoneNum.replaceAll("-", "");
-	}
+        return phoneNum.replaceAll("-", "");
+    }
 
 }

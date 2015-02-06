@@ -7,10 +7,15 @@ import java.util.Date;
 
 public interface OpenMrsClient {
 
-	boolean hasConcept(String patientId, String conceptName);
-	public void printValues(String externalID, String conceptName);
-	public DateTime lastTimeFulfilledDateTimeObs(String patientId, String conceptName);
-	public OpenMRSPatient getPatientByMotechId(String patientId);
-	void savePatient(OpenMRSPatient patient);
-	void addEncounterForPatient(String motechId, String conceptName, Date observedDate);
+    boolean hasConcept(String patientId, String conceptName);
+
+    public void printValues(String externalID, String conceptName);
+
+    public DateTime lastTimeFulfilledDateTimeObs(String patientId, String conceptName);
+
+    public OpenMRSPatient getPatientByMotechId(String patientId);
+
+    void savePatient(OpenMRSPatient patient);
+
+    void addEncounterForPatient(String motechId, String conceptName, Date observedDate);
 }

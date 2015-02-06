@@ -11,16 +11,16 @@ import java.util.Map;
 @Component
 public class PatientEnrollmentValidator extends AbstractPatientValidator {
 
-	@Autowired
-	public PatientEnrollmentValidator(OpenMrsClient openmrsClient) {
-		super(openmrsClient);
-	}
+    @Autowired
+    public PatientEnrollmentValidator(OpenMrsClient openmrsClient) {
+        super(openmrsClient);
+    }
 
-	public Map<String, String> validate(PatientEnrollment formBean) {
+    public Map<String, String> validate(PatientEnrollment formBean) {
         Map<String, String> errors = new HashMap<>();
-		validatePhoneNumberFormat(formBean.getPhoneNumber(), errors);
-		validateOpenMrsPatientExists(formBean.getMotechId(), errors);
-		
-		return errors;
-	}
+        validatePhoneNumberFormat(formBean.getPhoneNumber(), errors);
+        validateOpenMrsPatientExists(formBean.getMotechId(), errors);
+
+        return errors;
+    }
 }

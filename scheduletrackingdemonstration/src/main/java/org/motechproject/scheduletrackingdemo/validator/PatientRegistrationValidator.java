@@ -12,25 +12,25 @@ import java.util.Map;
 @Component
 public class PatientRegistrationValidator extends AbstractMobileValidator {
 
-	private OpenMrsClient openmrsClient;
+    private OpenMrsClient openmrsClient;
 
-	@Autowired
-	public PatientRegistrationValidator(OpenMrsClient openmrsClient) {
-		this.openmrsClient = openmrsClient;
-	}
+    @Autowired
+    public PatientRegistrationValidator(OpenMrsClient openmrsClient) {
+        this.openmrsClient = openmrsClient;
+    }
 
-	public Map<String, String> validate(PatientRegistration formBean) {
+    public Map<String, String> validate(PatientRegistration formBean) {
         Map<String, String> errors = new HashMap<>();
-		validatePhoneNumberFormat(formBean.getPhoneNumber(), errors);
-		validateUniqueMotechId(formBean.getMotechId(), errors);
+        validatePhoneNumberFormat(formBean.getPhoneNumber(), errors);
+        validateUniqueMotechId(formBean.getMotechId(), errors);
 
-		return errors;
-	}
+        return errors;
+    }
 
-	protected void validateUniqueMotechId(String motechId, Map<String, String> errors) {
-		OpenMRSPatient existingPatient = openmrsClient.getPatientByMotechId(motechId);
-		if (existingPatient != null) {
-			errors.put("motechId", "Already a patient with this MoTeCH Id");
-		}
-	}
+    protected void validateUniqueMotechId(String motechId, Map<String, String> errors) {
+        OpenMRSPatient existingPatient = openmrsClient.getPatientByMotechId(motechId);
+        if (existingPatient != null) {
+            errors.put("motechId", "Already a patient with this MoTeCH Id");
+        }
+    }
 }

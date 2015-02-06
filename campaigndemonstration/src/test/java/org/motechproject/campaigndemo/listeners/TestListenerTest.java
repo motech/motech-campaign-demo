@@ -28,72 +28,72 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class TestListenerTest {
 
-	@InjectMocks
-	private TestListener listener = new TestListener();
-	
-	@Mock
-	private PatientDataService patientDataService;
-	
-	@Mock
-	private OutboundCallService outboundCallService;
-	
-	@Mock
-	private MessageCampaignService campaignService;
+    @InjectMocks
+    private TestListener listener = new TestListener();
 
-	@Mock
-	private CMSLiteService cmsliteService;
-	
-	@Test
-	public void testWhenPatientExists() throws ContentNotFoundException {
-		
-		List<String> formats = new ArrayList<String>();
-		formats.add("IVR");
-		
-		List<String> languages = new ArrayList<String>();
-		languages.add("en");
-		
-		MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
-		event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, "TestCampaign");
-		event.getParameters().put(EventKeys.MESSAGE_KEY, "TestCampaignKey");
-		event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, "12345");
-		event.getParameters().put(EventKeys.MESSAGE_FORMATS, formats);
-		event.getParameters().put(EventKeys.MESSAGE_LANGUAGES, languages);
+    @Mock
+    private PatientDataService patientDataService;
 
-		Patient testPatient = new Patient("12345", "207");
+    @Mock
+    private OutboundCallService outboundCallService;
 
-		Mockito.when(patientDataService.findByExternalId("12345")).thenReturn(testPatient);
-		Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(
-				new StringContent("en", "cron-message", "demo.xml"));
-		Mockito.when(cmsliteService.isStringContentAvailable("en", "TestCampaignKey")).thenReturn(true);
-		listener.execute(event);
-		
-		verify(outboundCallService).initiateCall(eq("voxeo"), anyMap());
+    @Mock
+    private MessageCampaignService campaignService;
 
-	}
-	
-	@Test
-	public void testWhenPatientDoesNotExist() throws ContentNotFoundException {
-		
-		List<String> formats = new ArrayList<>();
-		formats.add("IVR");
-		
-		List<String> languages = new ArrayList<>();
-		languages.add("en");
-		
-		MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
-		event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, "TestCampaign");
-		event.getParameters().put(EventKeys.MESSAGE_KEY, "TestCampaignKey");
-		event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, "12345");
-		event.getParameters().put(EventKeys.MESSAGE_FORMATS, formats);
-		event.getParameters().put(EventKeys.MESSAGE_LANGUAGES, languages);
-		
-		Mockito.when(patientDataService.findByExternalId("12345")).thenReturn(null);
-		Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(new StringContent("en", "cron-message", "demo.xml"));
-		Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(new StringContent("en", "cron-message", "demo.xml"));
-		
-		listener.execute(event);
-		
-		verify(campaignService).stopAll(Matchers.any(CampaignEnrollmentsQuery.class));
-	}
-	
+    @Mock
+    private CMSLiteService cmsliteService;
+
+    @Test
+    public void testWhenPatientExists() throws ContentNotFoundException {
+
+        List<String> formats = new ArrayList<String>();
+        formats.add("IVR");
+
+        List<String> languages = new ArrayList<String>();
+        languages.add("en");
+
+        MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
+        event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, "TestCampaign");
+        event.getParameters().put(EventKeys.MESSAGE_KEY, "TestCampaignKey");
+        event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, "12345");
+        event.getParameters().put(EventKeys.MESSAGE_FORMATS, formats);
+        event.getParameters().put(EventKeys.MESSAGE_LANGUAGES, languages);
+
+        Patient testPatient = new Patient("12345", "207");
+
+        Mockito.when(patientDataService.findByExternalId("12345")).thenReturn(testPatient);
+        Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(
+                new StringContent("en", "cron-message", "demo.xml"));
+        Mockito.when(cmsliteService.isStringContentAvailable("en", "TestCampaignKey")).thenReturn(true);
+        listener.execute(event);
+
+        verify(outboundCallService).initiateCall(eq("voxeo"), anyMap());
+
+    }
+
+    @Test
+    public void testWhenPatientDoesNotExist() throws ContentNotFoundException {
+
+        List<String> formats = new ArrayList<>();
+        formats.add("IVR");
+
+        List<String> languages = new ArrayList<>();
+        languages.add("en");
+
+        MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
+        event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, "TestCampaign");
+        event.getParameters().put(EventKeys.MESSAGE_KEY, "TestCampaignKey");
+        event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, "12345");
+        event.getParameters().put(EventKeys.MESSAGE_FORMATS, formats);
+        event.getParameters().put(EventKeys.MESSAGE_LANGUAGES, languages);
+
+        Mockito.when(patientDataService.findByExternalId("12345")).thenReturn(null);
+        Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(new StringContent("en", "cron-message", "demo.xml"));
+        Mockito.when(cmsliteService.getStringContent("en", "TestCampaignKey")).thenReturn(new StringContent("en", "cron-message", "demo.xml"));
+
+        listener.execute(event);
+
+        verify(campaignService).stopAll(Matchers.any(CampaignEnrollmentsQuery.class));
+    }
+
 }

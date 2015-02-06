@@ -20,27 +20,27 @@ import java.util.Properties;
 /**
  * Class to initialize CMSlite content in the DB upon server startup
  * Currently, the content is the name of the voice XML file to be run by Voxeo
- * @author Russell Gillen
  *
+ * @author Russell Gillen
  */
 @Component
 public class ScheduleContentInitiator {
 
-	/**
-	 * Defined in the motech-cmslite-api module, available from applicationCmsLiteApi.xml import
-	 */
-	@Autowired
-	private CMSLiteService cmsliteService;
+    /**
+     * Defined in the motech-cmslite-api module, available from applicationCmsLiteApi.xml import
+     */
+    @Autowired
+    private CMSLiteService cmsliteService;
 
     @Autowired
     private ScheduleTrackingService scheduleTrackingService;
-	
-	@Autowired
-	@Qualifier(value = "scheduleMessages")
-	private Properties properties;
+
+    @Autowired
+    @Qualifier(value = "scheduleMessages")
+    private Properties properties;
 
     @PostConstruct
-	public void bootstrap() throws CMSLiteException, IOException {
+    public void bootstrap() throws CMSLiteException, IOException {
         for (int i = 1; i <= 4; i++) {
             try (InputStream demoMessageStream = this.getClass().getResourceAsStream("/duedemoconcept" + i + ".wav")) {
                 StreamContent demoFile = new StreamContent("en", "DemoConceptQuestion" + i + "Due",
@@ -56,7 +56,7 @@ public class ScheduleContentInitiator {
             addToCmsLite(new StringContent("en", "DemoConceptQuestion" + i + "due", getDemoDueMessage(i)));
             addToCmsLite(new StringContent("en", "DemoConceptQuestion" + i + "late", getDemoLateMessage(i)));
         }
-		
+
         try (InputStream cronResourceStream = this.getClass().getResourceAsStream("/defaulteddemoschedule.wav")) {
             StreamContent cron = new StreamContent("en", "defaultedDemoSchedule",
                     toByteArray(cronResourceStream), "checksum1", "audio/wav");
@@ -72,8 +72,8 @@ public class ScheduleContentInitiator {
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
-        
-	}
+
+    }
 
     private void addToCmsLite(Content content) throws CMSLiteException {
         if (content instanceof StringContent) {
@@ -87,13 +87,13 @@ public class ScheduleContentInitiator {
         }
     }
 
-	private String getDemoDueMessage(int messageNumber) {
-	    return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Due");
-	}
-	
-	private String getDemoLateMessage(int messageNumber) {
-		return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Late");
-	}
+    private String getDemoDueMessage(int messageNumber) {
+        return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Due");
+    }
+
+    private String getDemoLateMessage(int messageNumber) {
+        return this.properties.getProperty("DemoConceptQuestion" + messageNumber + "Late");
+    }
 
     private Byte[] toByteArray(InputStream stream) throws IOException {
         return ArrayUtils.toObject(IOUtils.toByteArray(stream));

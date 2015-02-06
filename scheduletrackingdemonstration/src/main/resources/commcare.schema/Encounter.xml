@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:orx="http://openrosa.org/jr/xforms" xmlns="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa" xmlns:vellum="http://commcarehq.org/xforms/vellum">
-	<h:head>
-		<h:title>Encounter</h:title>
-		<model>
-			<instance>
-				<data xmlns:jrm="http://dev.commcarehq.org/jr/xforms" xmlns="http://openrosa.org/formdesigner/E42DBAFD-81D8-4456-9F70-3E8CF4E04F58" uiVersion="1" version="1" name="Encounter">
-					<motechId />
-					<observedDate />
-					<observedConcept />
-				</data>
-			</instance>
-			<bind nodeset="/data/motechId" type="xsd:string" />
-			<bind nodeset="/data/observedDate" type="xsd:date" />
-			<bind nodeset="/data/observedConcept" type="xsd:int" />
-			<itext>
-				<translation lang="en" default="">
-					<text id="motechId-label">
-						<value>MOTECH ID</value>
-					</text>
-					<text id="observedDate-label">
-						<value>Observed date</value>
-					</text>
-					<text id="observedConcept-label">
-						<value>Observed concept</value>
-					</text>
-				</translation>
-			</itext>
-		</model>
-	</h:head>
-	<h:body>
-		<input ref="/data/motechId">
-			<label ref="jr:itext('motechId-label')" />
-		</input>
-		<input ref="/data/observedDate">
-			<label ref="jr:itext('observedDate-label')" />
-		</input>
-		<input ref="/data/observedConcept">
-			<label ref="jr:itext('observedConcept-label')" />
-		</input>
-	</h:body>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>Encounter</h:title>
+        <model>
+            <instance>
+                <data
+                        xmlns="http://openrosa.org/formdesigner/E42DBAFD-81D8-4456-9F70-3E8CF4E04F58" uiVersion="1"
+                        version="1" name="Encounter">
+                    <motechId/>
+                    <observedDate/>
+                    <observedConcept/>
+                </data>
+            </instance>
+            <bind nodeset="/data/motechId" type="xsd:string"/>
+            <bind nodeset="/data/observedDate" type="xsd:date"/>
+            <bind nodeset="/data/observedConcept" type="xsd:int"/>
+            <itext>
+                <translation lang="en" default="">
+                    <text id="motechId-label">
+                        <value>MOTECH ID</value>
+                    </text>
+                    <text id="observedDate-label">
+                        <value>Observed date</value>
+                    </text>
+                    <text id="observedConcept-label">
+                        <value>Observed concept</value>
+                    </text>
+                </translation>
+            </itext>
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/motechId">
+            <label ref="jr:itext('motechId-label')"/>
+        </input>
+        <input ref="/data/observedDate">
+            <label ref="jr:itext('observedDate-label')"/>
+        </input>
+        <input ref="/data/observedConcept">
+            <label ref="jr:itext('observedConcept-label')"/>
+        </input>
+    </h:body>
 </h:html>

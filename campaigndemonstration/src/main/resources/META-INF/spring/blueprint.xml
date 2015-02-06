@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:osgi="http://www.eclipse.org/gemini/blueprint/schema/blueprint"
@@ -31,6 +32,7 @@
     <osgi:reference id="smsServiceOSGi" interface="org.motechproject.sms.service.SmsService"/>
     <osgi:reference id="ivrServiceOSGi" interface="org.motechproject.ivr.service.OutboundCallService"/>
     <osgi:reference id="cmsLiteServiceOSGi" interface="org.motechproject.cmslite.service.CMSLiteService"/>
-    <osgi:reference id="messageCampaignServiceOSGi" interface="org.motechproject.messagecampaign.service.MessageCampaignService"/>
+    <osgi:reference id="messageCampaignServiceOSGi"
+                    interface="org.motechproject.messagecampaign.service.MessageCampaignService"/>
 
 </beans>

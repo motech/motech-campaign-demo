@@ -19,25 +19,25 @@ import java.util.Properties;
 /**
  * Class to initialize CMSlite content in the DB upon server startup
  * Currently, the content is the name of the voice XML file to be run by Voxeo
- * @author Russell Gillen
  *
+ * @author Russell Gillen
  */
 @Component
 public class ContentInitiator {
 
     public static final String COMM_TYPE = "commType";
 
-	/**
-	 * Defined in the cms-lite module, available as an OSGi Service
-	 */
-	@Autowired
-	private CMSLiteService cmsLiteService;
-	
-	@Autowired
-	@Qualifier(value = "pregnancyMessages")
-	private Properties properties;
-	
-	public void bootstrap() throws IOException, CMSLiteException {
+    /**
+     * Defined in the cms-lite module, available as an OSGi Service
+     */
+    @Autowired
+    private CMSLiteService cmsLiteService;
+
+    @Autowired
+    @Qualifier(value = "pregnancyMessages")
+    private Properties properties;
+
+    public void bootstrap() throws IOException, CMSLiteException {
         for (int i = 5; i <= 40; i++) {
             try (InputStream ghanaMessageStream = this.getClass().getResourceAsStream("/week" + i + ".wav")) {
                 StreamContent ghanaFile = new StreamContent("en", "ghanaPregnancyWeek" + i, toByteArray(ghanaMessageStream),
@@ -55,11 +55,11 @@ public class ContentInitiator {
             cmsLiteService.addContent(new StringContent("en", "cron-message",
                     "This is an SMS cron message that will repeat every two minutes until you unenroll", smsMetadata()));
         }
-	}
+    }
 
-	private String getPregnancyMessage(int messageNumber) {
-	        return this.properties.getProperty("messageWeek" + messageNumber);
-	}
+    private String getPregnancyMessage(int messageNumber) {
+        return this.properties.getProperty("messageWeek" + messageNumber);
+    }
 
     private Map<String, String> ivrMetadata() {
         return commTypeMetadata("IVR");
