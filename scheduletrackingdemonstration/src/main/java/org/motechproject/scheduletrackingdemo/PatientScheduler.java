@@ -74,7 +74,7 @@ public class PatientScheduler {
 
     public void saveMotechPatient(String externalID, String phoneNum) {
         if (StringUtils.isNotBlank(externalID)) {
-            Patient patient = patientDataService.findByExternalId(externalID); //Only one patient should be returned if ID is unique, but it is returned as list
+            Patient patient = patientDataService.findByExternalId(externalID);
             if (patient != null) { //Patient already exists, so it is updated
                 patient.setPhoneNum(phoneNum);
                 patientDataService.update(patient);

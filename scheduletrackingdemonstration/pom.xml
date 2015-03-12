@@ -38,6 +38,11 @@
             <artifactId>openmrs-19</artifactId>
             <version>${motech.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>commcare</artifactId>
+            <version>${motech.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

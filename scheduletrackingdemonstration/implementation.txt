@@ -16,7 +16,7 @@ Demo Concept Schedule.
 The demo implementation also registers two event listeners. One for Commcare form events, sent upon receiving a form and
 another for the events sent by the Schedule tracking module. The form schema for CommCareHQ is located in the commcare.schema
 package and the schema for scheduletracking in the resource package. The event handlers present the integration between
-Commcare, OpenMRS and Scedule tracking modules. The event handlers are explained in details in the next paragraphs.
+Commcare, OpenMRS and Schedule tracking modules. The event handlers are explained in details in the next paragraphs.
 
 Before starting to work with the demo implementation, you must prepare your CommCareHQ and OpenMRS instance. First, access
 the CommCareHQ and upload the forms schema, present in the commcare.schema folder. Then access MOTECH Commcare module
